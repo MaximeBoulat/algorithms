@@ -24,15 +24,22 @@ typedef NS_ENUM(NSInteger, TileType) {
 @property (nonatomic, assign) BOOL isWall;
 @property (nonatomic, assign) BOOL visited;
 
-
 @property (nonatomic, assign) TileType type;
-
-
-@end
-
-@interface Coordinate : NSObject
+@property (nonatomic, assign) NSInteger score;
 
 @property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) NSInteger column;
 
+
 @end
+
+@interface Person : NSObject
+
+@property (nonatomic, copy) NSString * firstName;
+@property (nonatomic, retain) NSDate * birthDate;
+
+- (instancetype)initWithDate: (NSDate *) date andName: (NSString *) name;
+- (NSComparisonResult)compare:(id)other;
+
+@end
+

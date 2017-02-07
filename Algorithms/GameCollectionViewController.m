@@ -17,6 +17,9 @@
 
 @property (nonatomic, retain) NSMutableArray <NSMutableArray *> * datasource;
 
+@property (nonatomic, retain) GameTile * startingPoint;
+@property (nonatomic, retain) GameTile * goal;
+
 @end
 
 
@@ -39,7 +42,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [super viewDidLoad];
 	
 	self.insetValue = 15;
-	self.numberOfItemsAcross = 35;
+	self.numberOfItemsAcross = 31;
 	
 	CGFloat widthOfItem = (self.view.frame.size.width - self.insetValue * 2) / self.numberOfItemsAcross;
 	int availableHeight = (self.view.frame.size.height - (2 * self.insetValue));
@@ -52,7 +55,8 @@ static NSString * const reuseIdentifier = @"Cell";
 		NSMutableArray * array = [NSMutableArray new];
 		for (int l = 0; l < self.numberOfItemsAcross; l++) {
 			GameTile * tile = [GameTile new];
-			
+			tile.row = i;
+			tile.column = l;
 			if (i % 2 == 0 || l % 2 == 0) {
 				tile.isWall = YES;
 			}
@@ -64,7 +68,9 @@ static NSString * const reuseIdentifier = @"Cell";
 		[self.datasource addObject:array];
 	}
 	
-	[self makeMaze];
+//	[self makeMaze];
+	//[self doBinarySearch];
+	[self doSort];
 
 }
 
@@ -107,6 +113,8 @@ static NSString * const reuseIdentifier = @"Cell";
 			break;
 		case goal:
 			cell.tileView.backgroundColor = [UIColor redColor];
+			break;
+		default:
 			break;
 			
 	}
@@ -211,10 +219,7 @@ static NSString * const reuseIdentifier = @"Cell";
 						}
 						else {
 							
-							Coordinate * current = [Coordinate new];
-							current.row = currentRow;
-							current.column = currentColumn;
-							[undoStack insertObject:current atIndex:0];
+							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
 							
 							NSLog(@"North: Updating");
 							tilesVisited ++;
@@ -247,10 +252,7 @@ static NSString * const reuseIdentifier = @"Cell";
 						}
 						else {
 							
-							Coordinate * current = [Coordinate new];
-							current.row = currentRow;
-							current.column = currentColumn;
-							[undoStack insertObject:current atIndex:0];
+							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
 							
 							NSLog(@"East: Updating");
 							tilesVisited ++;
@@ -286,10 +288,7 @@ static NSString * const reuseIdentifier = @"Cell";
 						}
 						else {
 							
-							Coordinate * current = [Coordinate new];
-							current.row = currentRow;
-							current.column = currentColumn;
-							[undoStack insertObject:current atIndex:0];
+							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
 							
 							NSLog(@"South: Updating");
 							tilesVisited ++;
@@ -321,10 +320,7 @@ static NSString * const reuseIdentifier = @"Cell";
 						}
 						else {
 							
-							Coordinate * current = [Coordinate new];
-							current.row = currentRow;
-							current.column = currentColumn;
-							[undoStack insertObject:current atIndex:0];
+							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
 							
 							NSLog(@"West: Updating");
 							tilesVisited ++;
@@ -346,7 +342,7 @@ static NSString * const reuseIdentifier = @"Cell";
 				
 				NSLog(@"Dead end, backing out with %li", (long) undoStack.count);
 				
-				Coordinate * previous = undoStack[0];
+				GameTile * previous = undoStack[0];
 				[undoStack removeObjectAtIndex:0];
 				currentColumn = previous.column;
 				currentRow = previous.row;
@@ -360,7 +356,7 @@ static NSString * const reuseIdentifier = @"Cell";
 				[self.collectionView reloadData];
 			});
 			
-//			[NSThread sleepForTimeInterval:0.1];
+//			[NSThread sleepForTimeInterval:0.5];
 			
 			if (tilesVisited >= totalTiles) {
 				previous.type = none;
@@ -391,6 +387,8 @@ static NSString * const reuseIdentifier = @"Cell";
 	}
 	
 	tile.type = startingPoint;
+	self.startingPoint = tile;
+	
 	[self.collectionView reloadData];
 	
 	// pick random row and column for goal until you get an empty tile
@@ -406,19 +404,277 @@ static NSString * const reuseIdentifier = @"Cell";
 	}
 	
 	tile.type = goal;
+	self.goal = tile;
 	[self.collectionView reloadData];
 	
 }
 
 - (void) findpath {
 	
+	// lets mark all the squares with a score until we reach the goal.
+	NSInteger row = self.goal.row;
+	NSInteger column = self.goal.column;
+	
+	// Now lets explore every possible path
+	
 	
 	
 }
 
+- (void) doBinarySearch {
+	
+	NSInteger random = arc4random_uniform(100000);
+	
+	NSMutableArray * array = [NSMutableArray new];
+	
+	for (int i = 0; i<random; i++) {
+		[array addObject:@(i)];
+	}
+	
+	NSLog(@"What is the random: %li and the array count: %li", random, array.count);
+	
+	NSInteger target = arc4random_uniform(array.count);
+	
+	NSInteger min = 0;
+	NSInteger max = array.count - 1;
+	
+	while (1) {
+		NSInteger middle = (max + min) / 2;
+		NSInteger guess = ((NSNumber *)array[middle]).intValue;
+		
+		NSLog(@"guess: %li, target: %li, min: %li, max: %li", guess, target, min, max);
+		
+		if (guess == target) {
+			NSLog(@"Found it! Breaking");
+			break;
+		}
+		else if (guess > target){
+			max = guess - 1;
+		}
+		else {
+			min = guess + 1;
+		}
+	}
+}
+
+
+- (void) doSort {
+	
+	NSMutableArray * array = @[@"Kevin",
+							   @"John",
+							   @"Amy",
+							   @"Britney",
+							   @"Marc",
+							   @"Joseph",
+							   @"Mike",
+							   @"Dan",
+							   @"Dave",
+							   @"Eric",
+							   @"Ann",
+							   @"Mary"];
+	
+	
+	
+	
+	// First method (using compare:)
+	
+	NSArray * sortedArray1 = [array sortedArrayUsingSelector:@selector(compare:)];
+	
+
+	// Second method (using sort descriptors)
+	
+	NSArray * dates = [self makeArrayOfDates];
+	NSMutableArray * array2 = [NSMutableArray new];
+	
+	for (int i = 0; i<dates.count ; i++) {
+		NSDate * date = dates[i];
+		NSString * name = array[i];
+		
+		Person * person = [[Person alloc]initWithDate:date andName:name];
+		[array2 addObject:person];
+	}
+	
+	NSSortDescriptor * descriptors = [[NSSortDescriptor alloc]initWithKey:@"birthDate" ascending:YES];
+	NSArray * sortedArray2 = [array2 sortedArrayUsingDescriptors:@[descriptors]];
+	
+	
+//	for (Person * person in sortedArray2) {
+//		NSLog(@"this is the date: %@", person.birthDate);
+//	}
+	
+	// Third method (implementing compare)
+	
+	NSArray * sortedArray3 = [array2 sortedArrayUsingSelector:@selector(compare:)];
+	
+	for (Person * person in sortedArray3) {
+		NSLog(@"this is the date: %@", person.birthDate);
+	}
+	
+	// Fourth method (using a block)
+	
+	NSArray * sortedArray4 = [array2 sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+		
+		Person * person1 = (Person *) obj1;
+		Person * person2 = (Person *) obj2;
+		
+		return [person1 compare: person2];
+	}];
+	
+//	for (Person * person in sortedArray4) {
+//		NSLog(@"this is the date: %@", person.birthDate);
+//	}
+	
+	
+	// Location sort
+	
+	NSMutableArray * newArray = [@[]mutableCopy];
+	NSDate * referenceDate = [NSDate date];
+	Person * youngestPerson;
+	
+	while (array2.count) {
+		
+		int counter = 0;
+		
+		for (Person * person in array2) {
+			counter ++;
+
+		}
+		
+		
+		for (int i = 0; i < array2.count; i++) {
+			Person * person = array2[i];
+			NSLog(@"Person is %@, reference date is: %@", person.firstName, referenceDate);
+			if ([person.birthDate compare:referenceDate] == NSOrderedAscending) {
+				NSLog(@"test passed");
+				youngestPerson = person;
+				referenceDate = person.birthDate;
+			}
+		}
+		
+		[newArray addObject:youngestPerson];
+		[array2 removeObject:youngestPerson];
+		
+		NSLog(@"Removing this person: %@", youngestPerson.firstName);
+
+		referenceDate = [NSDate date];
+	
+	}
+	
+	
+	for (Person * person in newArray) {
+		NSLog(@"enumerating person with date: %@", person.birthDate);
+	}
+	
+
+	
+	
+}
+
+- (NSArray *) makeArrayOfDates {
+	
+	NSMutableArray * dates = [NSMutableArray new];
+	
+	NSDateComponents * components = [[NSDateComponents alloc]init];
+	components.day = 23;
+	components.month = 10;
+	components.year = 1980;
+	
+	NSDate * birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 12;
+	components.month = 3;
+	components.year = 1962;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 21;
+	components.month = 7;
+	components.year = 1986;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 24;
+	components.month = 3;
+	components.year = 1981;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 17;
+	components.month = 8;
+	components.year = 1964;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 17;
+	components.month = 8;
+	components.year = 1964;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 9;
+	components.month = 8;
+	components.year = 1962;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 25;
+	components.month = 7;
+	components.year = 1988;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 11;
+	components.month = 4;
+	components.year = 1987;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 25;
+	components.month = 12;
+	components.year = 1982;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 2;
+	components.month = 5;
+	components.year = 1981;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	components = [[NSDateComponents alloc]init];
+	components.day = 17;
+	components.month = 10;
+	components.year = 1983;
+	
+	birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
+	[dates addObject:birthdate];
+	
+	return [dates copy];
+	
+}
 
 @end
-
 
 
 @implementation GameTile
@@ -437,9 +693,31 @@ static NSString * const reuseIdentifier = @"Cell";
 
 @end
 
-@implementation Coordinate
+@implementation Person
 
+- (instancetype)initWithDate: (NSDate *) date andName: (NSString *) name
+{
+	self = [super init];
+	if (self) {
+		self.birthDate = date;
+		self.firstName = name;
+	}
+	return self;
+}
 
+- (NSComparisonResult)compare:(id)other
+{
+	
+	if ([self.birthDate compare: ((Person *)other).birthDate] == NSOrderedDescending) {
+		return NSOrderedDescending;
+	}
+	else if ([self.birthDate compare: ((Person *)other).birthDate] == NSOrderedAscending) {
+		return NSOrderedAscending;
+	}
+	else {
+		return NSOrderedSame;
+	}
+}
 
 
 @end
