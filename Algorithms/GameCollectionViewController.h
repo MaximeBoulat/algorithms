@@ -30,16 +30,10 @@ typedef NS_ENUM(NSInteger, TileType) {
 @property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) NSInteger column;
 
+@property (nonatomic, assign) GameTile * ancestor;
+
 
 @end
 
-@interface Person : NSObject
 
-@property (nonatomic, copy) NSString * firstName;
-@property (nonatomic, retain) NSDate * birthDate;
-
-- (instancetype)initWithDate: (NSDate *) date andName: (NSString *) name;
-- (NSComparisonResult)compare:(id)other;
-
-@end
 

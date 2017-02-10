@@ -16,6 +16,7 @@
 		6A9769E81E4581B000C0800C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A9769E71E4581B000C0800C /* Assets.xcassets */; };
 		6A9769EB1E4581B000C0800C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A9769E91E4581B000C0800C /* LaunchScreen.storyboard */; };
 		6A9769F41E4583A000C0800C /* GameCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9769F31E4583A000C0800C /* GameCollectionViewController.m */; };
+		6AFF822D1E4E44B500B30813 /* AlgorithmManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		6A9769EC1E4581B000C0800C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A9769F21E4583A000C0800C /* GameCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCollectionViewController.h; sourceTree = "<group>"; };
 		6A9769F31E4583A000C0800C /* GameCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCollectionViewController.m; sourceTree = "<group>"; };
+		6AFF822B1E4E44B500B30813 /* AlgorithmManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmManager.h; sourceTree = "<group>"; };
+		6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +76,8 @@
 				6A3FD4061E4AB00A008AEBC1 /* ContainerViewController.m */,
 				6A9769F21E4583A000C0800C /* GameCollectionViewController.h */,
 				6A9769F31E4583A000C0800C /* GameCollectionViewController.m */,
+				6AFF822B1E4E44B500B30813 /* AlgorithmManager.h */,
+				6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */,
 				6A3FD4021E4AAFA0008AEBC1 /* SierpinskyViewController.h */,
 				6A3FD4031E4AAFA0008AEBC1 /* SierpinskyViewController.m */,
 				6A6271971E46D7650017BE54 /* TileCollectionViewCell.h */,
@@ -170,6 +175,7 @@
 				6A6271991E46D7650017BE54 /* TileCollectionViewCell.m in Sources */,
 				6A3FD4071E4AB00A008AEBC1 /* ContainerViewController.m in Sources */,
 				6A9769F41E4583A000C0800C /* GameCollectionViewController.m in Sources */,
+				6AFF822D1E4E44B500B30813 /* AlgorithmManager.m in Sources */,
 				6A9769DD1E4581B000C0800C /* main.m in Sources */,
 				6A3FD4041E4AAFA0008AEBC1 /* SierpinskyViewController.m in Sources */,
 			);

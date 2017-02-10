@@ -22,21 +22,21 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	
-	for (UIViewController * maze in self.childViewControllers) {
-		if ([maze isKindOfClass: [GameCollectionViewController class]])
-		{
-			[maze willMoveToParentViewController:nil];
-			[maze.view removeFromSuperview];
-			[maze removeFromParentViewController];
-		}
-	}
-	
-	UIViewController * sierpinsky = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"Sierpinsky"];
-	sierpinsky.view.frame = self.container.frame;
-	[sierpinsky willMoveToParentViewController:self];
-	[self.view addSubview:sierpinsky.view];
-	[sierpinsky didMoveToParentViewController:self];
-	[self addChildViewController:sierpinsky];
+//	for (UIViewController * maze in self.childViewControllers) {
+//		if ([maze isKindOfClass: [GameCollectionViewController class]])
+//		{
+//			[maze willMoveToParentViewController:nil];
+//			[maze.view removeFromSuperview];
+//			[maze removeFromParentViewController];
+//		}
+//	}
+//	
+//	UIViewController * sierpinsky = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"Sierpinsky"];
+//	sierpinsky.view.frame = self.container.frame;
+//	[sierpinsky willMoveToParentViewController:self];
+//	[self.view addSubview:sierpinsky.view];
+//	[sierpinsky didMoveToParentViewController:self];
+//	[self addChildViewController:sierpinsky];
 	
 }
 

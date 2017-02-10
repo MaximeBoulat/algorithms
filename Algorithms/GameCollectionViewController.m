@@ -8,6 +8,7 @@
 
 #import "GameCollectionViewController.h"
 #import "TileCollectionViewCell.h"
+#import "AlgorithmManager.h"
 
 @interface GameCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -31,7 +32,7 @@ typedef NS_ENUM(NSInteger, Direction) {
 };
 
 
-@implementation GameCollectionViewController 
+@implementation GameCollectionViewController
 
 static NSString * const reuseIdentifier = @"Cell";
 
@@ -39,10 +40,10 @@ static NSString * const reuseIdentifier = @"Cell";
 #pragma mark - Lifecycle
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+	[super viewDidLoad];
 	
 	self.insetValue = 15;
-	self.numberOfItemsAcross = 39;
+	self.numberOfItemsAcross = 37;
 	
 	CGFloat widthOfItem = (self.view.frame.size.width - self.insetValue * 2) / self.numberOfItemsAcross;
 	int availableHeight = (self.view.frame.size.height - (2 * self.insetValue));
@@ -61,19 +62,20 @@ static NSString * const reuseIdentifier = @"Cell";
 				tile.isWall = YES;
 			}
 			
-//			int r = arc4random_uniform(2);
+			//			int r = arc4random_uniform(2);
 			
 			[array addObject:tile];
 		}
 		[self.datasource addObject:array];
 	}
 	
-//	[self makeMaze];
+	//	[self makeMaze];
+	[self breadthFirstMaze];
 	
-	NSInteger capacity = 9999;
+	NSInteger capacity = 3000;
 	
-	NSArray * names = [self makeArrayOfNamesWithCapacity:capacity];
-	NSArray * dates = [self makeArrayOfDatesWithCapacity:capacity];
+	NSArray * names = [AlgorithmManager makeArrayOfNamesWithCapacity:capacity];
+	NSArray * dates = [AlgorithmManager makeArrayOfDatesWithCapacity:capacity];
 	NSMutableArray * people = [NSMutableArray new];
 	
 	for (int i = 0; i<capacity ; i++) {
@@ -84,51 +86,71 @@ static NSString * const reuseIdentifier = @"Cell";
 		[people addObject:person];
 	}
 	
-//	[self doBinarySearch];
-//	
-//	[self compareSort:names];
-//	[self sortDescriptorsSort:people];
-//	[self compareSort2:people];
-//	[self blockCompare:people];
-//	[self locationSort:people];
-//	[self insertionSort:people];
+	//	[AlgorithmManager doBinarySearch];
+	//
+	//	[AlgorithmManager compareSort:names];
+	//	[AlgorithmManager sortDescriptorsSort:people];
+	//	[AlgorithmManager compareSort2:people];
+	//	[AlgorithmManager blockCompare:people];
+	//	[AlgorithmManager locationSort:people];
+	//	[AlgorithmManager insertionSort:people];
 	
 	/*
-	
-	NSInteger factorial = [self factorial:12];
-	NSLog(@"I found the factorial to be: %li", factorial);
-	
-	NSInteger recursiveFactorial = [self recursiveFactorial:12];
-	NSLog(@"I found the recursiveFactorial to be: %li", recursiveFactorial);
-	
-//	BOOL isPalindrome = [self isPalindrome:@"ababa"];
-	if ([self isPalindrome:@"ababaababaababaababa"]) {
+	 
+	 NSInteger factorial = [AlgorithmManager factorial:12];
+	 NSLog(@"I found the factorial to be: %li", factorial);
+	 
+	 NSInteger recursiveFactorial = [AlgorithmManager recursiveFactorial:12];
+	 NSLog(@"I found the recursiveFactorial to be: %li", recursiveFactorial);
+	 
+	 //	BOOL isPalindrome = [AlgorithmManager isPalindrome:@"ababa"];
+	 if ([self isPalindrome:@"ababaababaababaababa"]) {
 		NSLog(@"Found palindrome");
-	}
-	else {
+	 }
+	 else {
 		NSLog(@"Not a palindrome");
-	}
+	 }
 	 */
 	
-	NSInteger result = [self calculate:9 toThePowerOf:6];
-	NSLog(@"This is the result: %li", result);
+	//	NSInteger result = [AlgorithmManager calculate:9 toThePowerOf:6];
+	//	NSLog(@"This is the result: %li", result);
+	
+	/*
+	 NSDate * start = [NSDate date];
+	 NSArray * sorted = [AlgorithmManager mergeSort:people];
+	 
+	 NSDate * end = [NSDate date];
+	 NSTimeInterval duration = [end timeIntervalSinceDate:start];
+	 NSLog(@"mergeSort: completed in %f", duration);
+	 
+	 
+	 
+	 start = [NSDate date];
+	 [AlgorithmManager doQuickSort:people startIndex:0 endIndex:people.count - 1];
+	 
+	 end = [NSDate date];
+	 duration = [end timeIntervalSinceDate:start];
+	 NSLog(@"quicksort: completed in %f", duration);
+	 
+	 */
+	
 	
 }
 
 #pragma mark CollectionView methods
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 1;
+	return 1;
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.datasourceCount;
+	return self.datasourceCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    TileCollectionViewCell *cell = (TileCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-
+	TileCollectionViewCell *cell = (TileCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+	
 	// get row and column
 	NSInteger row = indexPath.row / self.numberOfItemsAcross;
 	NSInteger column = indexPath.row % self.numberOfItemsAcross;
@@ -165,18 +187,18 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 /*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+ // Uncomment this method to specify if the specified item should be highlighted during tracking
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
 	return YES;
-}
-*/
+ }
+ */
 
 /*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
+ // Uncomment this method to specify if the specified item should be selected
+ - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+ return YES;
+ }
+ */
 
 
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -204,8 +226,6 @@ static NSString * const reuseIdentifier = @"Cell";
 #pragma mark - Path finding
 
 - (void) makeMaze {
-	
-
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 		
@@ -397,7 +417,7 @@ static NSString * const reuseIdentifier = @"Cell";
 				[self.collectionView reloadData];
 			});
 			
-//			[NSThread sleepForTimeInterval:0.5];
+			//			[NSThread sleepForTimeInterval:0.5];
 			
 			if (tilesVisited >= totalTiles) {
 				previous.type = none;
@@ -408,10 +428,9 @@ static NSString * const reuseIdentifier = @"Cell";
 			[self setMarkers];
 		});
 	});
-	
-
-
 }
+
+
 
 - (void) setMarkers {
 	
@@ -450,331 +469,154 @@ static NSString * const reuseIdentifier = @"Cell";
 	
 }
 
+- (void) breadthFirstMaze {
+	
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		
+		NSMutableArray * queue = [@[]mutableCopy];
+		[queue addObject:self.datasource [1][1]];
+		
+		while (queue.count) {
+			
+			NSLog(@"Coming in the queue with queue count: %lu", (unsigned long)queue.count);
+			//
+			//			for (NSInteger i = 0; i < queue.count; i++) {
+			GameTile * currentTile = queue[0];
+			
+			// Get the adjacent tiles
+			
+			
+			// north
+			NSInteger row = currentTile.row + 2;
+			
+			NSLog(@"Checking row: %li and column: %li", row, currentTile.column);
+			
+			if (![self isOutOfBoundsForRow:row column:currentTile.column]) {
+				NSLog(@"Not out of bounds");
+				
+				GameTile * incoming = self.datasource[row][currentTile.column];
+				
+				
+				if (!incoming.ancestor) {
+					NSLog(@"Not visited");
+					[queue addObject:incoming];
+					GameTile * divider = self.datasource[currentTile.row + 1][currentTile.column];
+					divider.isWall = NO;
+					incoming.ancestor = currentTile;
+				}
+				else {
+					NSLog(@"Visited");
+				}
+			}
+			else {
+				NSLog(@"Out of bounds");
+			}
+			
+			// east
+			NSInteger column = currentTile.column + 2;
+			
+			NSLog(@"Checking row: %li and column: %li", currentTile.row, column);
+			if (![self isOutOfBoundsForRow:currentTile.row column:column]) {
+				NSLog(@"Not out of bounds");
+				GameTile * incoming = self.datasource[currentTile.row][column];
+				
+				if (!incoming.ancestor) {
+					NSLog(@"Not visited");
+					[queue addObject:incoming];
+					GameTile * divider = self.datasource[currentTile.row][currentTile.column + 1];
+					divider.isWall = NO;
+					incoming.ancestor = currentTile;
+				}
+				else {
+					NSLog(@"Visited");
+				}
+			}
+			else {
+				NSLog(@"Out of bounds");
+			}
+			
+			// south
+			row = currentTile.row + 2;
+			NSLog(@"Checking row: %li and column: %li", row, currentTile.column);
+			if (![self isOutOfBoundsForRow:row column:currentTile.column]) {
+				NSLog(@"Not out of bounds");
+				GameTile * incoming = self.datasource[row][currentTile.column];
+				
+				if (!incoming.ancestor) {
+					NSLog(@"Not visited");
+					[queue addObject:incoming];
+					GameTile * divider = self.datasource[currentTile.row - 1][currentTile.column];
+					divider.isWall = NO;
+					incoming.ancestor = currentTile;
+				}
+				else {
+					NSLog(@"Visited");
+				}
+			}
+			else {
+				NSLog(@"Out of bounds");
+			}
+			
+			// west
+			column = currentTile.column - 2;
+			NSLog(@"Checking row: %li and column: %li", currentTile.row, column);
+			if (![self isOutOfBoundsForRow:currentTile.row column:column]) {
+				NSLog(@"Not out of bounds");
+				GameTile * incoming = self.datasource[currentTile.row][column];
+				
+				if (!incoming.ancestor) {
+					NSLog(@"Not visited");
+					[queue addObject:incoming];
+					GameTile * divider = self.datasource[currentTile.row][currentTile.column - 1];
+					divider.isWall = NO;
+					incoming.ancestor = currentTile;
+				}
+				else {
+					NSLog(@"Visited");
+				}
+			}
+			else {
+				NSLog(@"Out of bounds");
+			}
+			
+			[queue removeObjectAtIndex:0];
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[self.collectionView reloadData];
+			});
+			
+		}
+		
+		
+		NSLog(@"EXITING the queue!!!!!");
+		
+	});
+	
+}
+
+
+- (BOOL) isOutOfBoundsForRow: (NSInteger) row column: (NSInteger) column {
+	
+	if (row <= 0 ||
+		column >= self.numberOfItemsAcross ||
+		column <= 0 ||
+		row >= self.datasource.count) {
+		return YES;
+	}
+	
+	return NO;
+}
+
+
 - (void) findpath {
 	
 	// lets mark all the squares with a score until we reach the goal.
-//	NSInteger row = self.goal.row;
-//	NSInteger column = self.goal.column;
+	//	NSInteger row = self.goal.row;
+	//	NSInteger column = self.goal.column;
 	
 	// Now lets explore every possible path
 	
 	
-	
-}
-
-
-#pragma mark - Binary Search
-
-
-- (void) doBinarySearch {
-	
-	NSInteger random = arc4random_uniform(100000);
-	
-	NSMutableArray * array = [NSMutableArray new];
-	
-	for (int i = 0; i<random; i++) {
-		[array addObject:@(i)];
-	}
-	
-	NSLog(@"What is the random: %li and the array count: %li", random, array.count);
-	
-	NSInteger target = arc4random_uniform((int)array.count);
-	
-	NSInteger min = 0;
-	NSInteger max = array.count - 1;
-	
-	while (1) {
-		NSInteger middle = (max + min) / 2;
-		NSInteger guess = ((NSNumber *)array[middle]).intValue;
-		
-		NSLog(@"guess: %li, target: %li, min: %li, max: %li", guess, target, min, max);
-		
-		if (guess == target) {
-			NSLog(@"Found it! Breaking");
-			break;
-		}
-		else if (guess > target){
-			max = guess - 1;
-		}
-		else {
-			min = guess + 1;
-		}
-	}
-}
-
-#pragma mark - Sort
-
-// First method (using compare:)
-- (void) compareSort: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingSelector:@selector(compare:)];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"compareSort: completed in %f", duration);
-}
-
-// Second method (using sort descriptors)
-- (void) sortDescriptorsSort: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSSortDescriptor * descriptors = [[NSSortDescriptor alloc]initWithKey:@"birthDate" ascending:YES];
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingDescriptors:@[descriptors]];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"sortDescriptorsSort: completed in %f", duration);
-	
-	//	for (Person * person in sortedArray) {
-	//		NSLog(@"this is the date: %@", person.birthDate);
-	//	}
-}
-
-// Third method (implementing compare)
-- (void) compareSort2: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingSelector:@selector(compare:)];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"compareSort2: completed in %f", duration);
-	
-	
-	//	for (Person * person in sortedArray) {
-	//		NSLog(@"this is the date: %@", person.birthDate);
-	//	}
-}
-
-// Fourth method (using a block)
-- (void) blockCompare: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-		
-		Person * person1 = (Person *) obj1;
-		Person * person2 = (Person *) obj2;
-		
-		return [person1 compare: person2];
-	}];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"blockCompare: completed in %f", duration);
-	
-	//	for (Person * person in sortedArray) {
-	//		NSLog(@"this is the date: %@", person.birthDate);
-	//	}
-}
-
-// Location sort
-- (void) locationSort: (NSMutableArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	//	NSLog(@"Coming in with array count: %i", array4.count);
-	for (int i = 0; i<array.count; i++) {
-		//		NSLog(@"Iterating with index: %li", i);
-		NSInteger indexOfSmallest = [self indexOfSmallestWithStartingIndex:i andArray: array];
-		Person * oldest = array[indexOfSmallest];
-		[array removeObjectAtIndex:indexOfSmallest];
-		[array insertObject:oldest atIndex:i];
-	}
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"locationSort: completed in %f", duration);
-	
-//	for (Person * person in array) {
-//		NSLog(@"LOCATION: print person with date: %@", person.birthDate);
-//	}
-}
-
-
-- (NSInteger) indexOfSmallestWithStartingIndex: (NSInteger) index andArray: (NSMutableArray *) array {
-	
-	NSDate * smallestDate = ((Person *)array[index]).birthDate;
-	NSInteger indexOfSmallest = index;
-	
-	//	NSLog(@"What is the array count: %i", array.count);
-	
-	for (NSInteger i = index + 1; i < array.count; i++) {
-		//		NSLog(@"Iterating2 with index: %i", i);
-		Person * person = array[i];
-		//		NSLog(@"Comparing birthdate: %@ with reference: %@", person.birthDate, smallestDate);
-		if ([person.birthDate compare:smallestDate] == NSOrderedAscending) {
-			//			NSLog(@"Test passed!, returning index: %i", i);
-			smallestDate = person.birthDate;
-			indexOfSmallest = i;
-		}
-	}
-	
-	return indexOfSmallest;
-}
-
-// Insertion sort
-- (void) insertionSort: (NSMutableArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	for (NSInteger i = 1; i < array.count; i++) {
-//		NSLog(@"iterating1 with i: %li", i);
-		Person * person = (Person *)array[i];
-		NSInteger insert = [self slideFromIndex:i-1 array:array value:person.birthDate];
-		array[insert] = person;
-	}
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"insertionSort: completed in %f", duration);
-	
-//	for (Person * person in array) {
-//		NSLog(@"INSERTION: print person with date: %@", person.birthDate);
-//	}
-}
-
-
-- (NSInteger) slideFromIndex: (NSInteger) index array: (NSMutableArray *) array value: (NSDate *) date {
-	
-	NSInteger insertIndex = index;
-//	NSLog(@"Coming in with index: %li", index);
-	
-	for (NSUInteger i = index; [((Person *)array[i]).birthDate compare:date] == NSOrderedDescending; i--) {
-//		NSLog(@"Iterating with index: %li", i);
-		array[i+1] = array[i];
-		insertIndex = i;
-		
-		if (i==0) {
-			break;
-		}
-	}
-	
-	return insertIndex;
-}
-
-#pragma mark - Recursion
-
-- (NSInteger) factorial: (NSInteger) value {
-	NSInteger result = 1;
-	
-	for (NSInteger i = 1; i <= value; i++) {
-		result = result * i;
-		NSLog(@"Iterating with result: %li", result);
-	}
-	
-	return result;
-}
-
-- (NSInteger) recursiveFactorial: (NSInteger) n {
-	
-	if (n == 0) {
-		return 1;
-	}
-
-	return n * ([self recursiveFactorial:(n -1)]);
-}
-
-
-- (BOOL) isPalindrome: (NSString *) string {
-	
-	if (string.length <= 1) {
-		return YES;
-	}
-	
-	NSString * firstLetter = [string substringToIndex:1];
-	NSString * lastLetter = [string substringFromIndex:string.length - 1];
-	
-	NSLog(@"Comparing first letter: %@ and last letter: %@", firstLetter, lastLetter);
-	
-	if ([firstLetter isEqualToString:lastLetter]) {
-		NSString * substring = [string substringWithRange:NSMakeRange(1, string.length -2)];
-		NSLog(@"Checking substring: %@", substring);
-		return [self isPalindrome: substring];
-	}
-	else {
-		return NO;
-	}
-}
-
-
-- (NSInteger) calculate: (NSInteger) value toThePowerOf: (NSInteger) power {
-	
-	if (power == 0) {
-		return 1;
-	}
-	
-	if (power > 0) {
-		if ([self isEven:power]) {
-			return [self calculate:value toThePowerOf:power/2] * [self calculate:value toThePowerOf:power/2];
-		}
-		else {
-			return value * [self calculate:value toThePowerOf:power - 1];
-		}
-	}
-	else {
-		return 1 / [self calculate:value toThePowerOf:- power];
-	}
-}
-
-- (BOOL) isEven: (NSInteger) value {
-	
-	return (value % 2 == 0);
-}
-
-
-#pragma mark - Helpers
-
-- (NSArray *) makeArrayOfNamesWithCapacity: (NSInteger) capacity {
-	
-	NSArray * names = @[@"Kevin",
-						@"John",
-						@"Amy",
-						@"Britney",
-						@"Marc",
-						@"Joseph",
-						@"Mike",
-						@"Dan",
-						@"Dave",
-						@"Eric",
-						@"Ann",
-						@"Mary"];
-	
-	NSInteger random = arc4random_uniform(12);
-	
-	NSMutableArray * returnArray = [@[]mutableCopy];
-	
-	for (NSInteger i = 0; i < capacity; i++){
-		[returnArray addObject:names [random]];
-	}
-	
-	return [returnArray copy];
-	
-}
-
-- (NSArray *) makeArrayOfDatesWithCapacity: (NSInteger) capacity {
-	
-	NSMutableArray * dates = [NSMutableArray new];
-	
-	int yearUpperBound = 2017;
-	int yearLowerBound = 1900;
-	
-	for (NSInteger i = 0; i<capacity ; i++) {
-		NSDateComponents * components = [[NSDateComponents alloc]init];
-		components.day = arc4random_uniform(28);
-		components.month = arc4random_uniform(13);
-		components.year = yearLowerBound + arc4random() % (yearUpperBound - yearLowerBound);;
-		
-		NSDate * birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
-		[dates addObject:birthdate];
-		
-	}
-	
-	return [dates copy];
 	
 }
 
@@ -797,31 +639,3 @@ static NSString * const reuseIdentifier = @"Cell";
 
 @end
 
-@implementation Person
-
-- (instancetype)initWithDate: (NSDate *) date andName: (NSString *) name
-{
-	self = [super init];
-	if (self) {
-		self.birthDate = date;
-		self.firstName = name;
-	}
-	return self;
-}
-
-- (NSComparisonResult)compare:(id)other
-{
-	
-	if ([self.birthDate compare: ((Person *)other).birthDate] == NSOrderedDescending) {
-		return NSOrderedDescending;
-	}
-	else if ([self.birthDate compare: ((Person *)other).birthDate] == NSOrderedAscending) {
-		return NSOrderedAscending;
-	}
-	else {
-		return NSOrderedSame;
-	}
-}
-
-
-@end
