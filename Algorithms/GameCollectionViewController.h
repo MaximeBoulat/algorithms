@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, TileType) {
 	pilot = 0,
 	startingPoint,
 	goal,
+	path,
 	none
 };
 
@@ -31,6 +32,8 @@ typedef NS_ENUM(NSInteger, TileType) {
 @property (nonatomic, assign) NSInteger column;
 
 @property (nonatomic, assign) GameTile * ancestor;
+
+@property (nonatomic, retain) NSMutableArray * neighbors;
 
 
 @end

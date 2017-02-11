@@ -11,6 +11,7 @@
 @interface TileCollectionViewCell : UICollectionViewCell
 
 @property (weak, nonatomic) IBOutlet UIView *tileView;
+@property (weak, nonatomic) IBOutlet UILabel *theLabel;
 
 
 @end

@@ -67,7 +67,7 @@
         <scene sceneID="VTL-Yy-AVM">
             <objects>
                 <collectionViewController id="xui-zn-o5L" customClass="GameCollectionViewController" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" id="blk-dh-u42">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="blk-dh-u42">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -87,9 +87,21 @@
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bf4-ty-FcS">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C0N-Sw-I4Y">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="9"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                             <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
+                                                <constraint firstItem="C0N-Sw-I4Y" firstAttribute="top" secondItem="Bf4-ty-FcS" secondAttribute="top" id="Adh-hY-7sn"/>
                                                 <constraint firstAttribute="width" secondItem="Bf4-ty-FcS" secondAttribute="height" multiplier="1:1" id="IPX-uO-l0v"/>
+                                                <constraint firstAttribute="trailing" secondItem="C0N-Sw-I4Y" secondAttribute="trailing" id="d3d-Ic-2dn"/>
+                                                <constraint firstItem="C0N-Sw-I4Y" firstAttribute="leading" secondItem="Bf4-ty-FcS" secondAttribute="leading" id="rkZ-sV-TIu"/>
+                                                <constraint firstAttribute="bottom" secondItem="C0N-Sw-I4Y" secondAttribute="bottom" id="vPk-ga-WyK"/>
                                             </constraints>
                                         </view>
                                     </subviews>
@@ -100,6 +112,7 @@
                                     <constraint firstItem="Bf4-ty-FcS" firstAttribute="centerY" secondItem="eDV-RA-Mfw" secondAttribute="centerY" id="uiw-q7-X1F"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="theLabel" destination="C0N-Sw-I4Y" id="Gty-oj-QsG"/>
                                     <outlet property="tileView" destination="Bf4-ty-FcS" id="lNZ-ek-k2S"/>
                                 </connections>
                             </collectionViewCell>
@@ -112,7 +125,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aUP-p4-nqQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2028" y="-113"/>
+            <point key="canvasLocation" x="2027.5362318840582" y="-113.31521739130436"/>
         </scene>
     </scenes>
 </document>

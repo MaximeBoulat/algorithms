@@ -43,7 +43,7 @@ static NSString * const reuseIdentifier = @"Cell";
 	[super viewDidLoad];
 	
 	self.insetValue = 15;
-	self.numberOfItemsAcross = 37;
+	self.numberOfItemsAcross = 13;
 	
 	CGFloat widthOfItem = (self.view.frame.size.width - self.insetValue * 2) / self.numberOfItemsAcross;
 	int availableHeight = (self.view.frame.size.height - (2 * self.insetValue));
@@ -69,8 +69,8 @@ static NSString * const reuseIdentifier = @"Cell";
 		[self.datasource addObject:array];
 	}
 	
-	//	[self makeMaze];
-	[self breadthFirstMaze];
+	[self makeMaze];
+	//	[self breadthFirstMaze];
 	
 	NSInteger capacity = 3000;
 	
@@ -169,6 +169,7 @@ static NSString * const reuseIdentifier = @"Cell";
 	
 	switch (gametile.type) {
 		case pilot:
+		case path:
 			cell.tileView.backgroundColor = [UIColor blueColor];
 			break;
 		case startingPoint:
@@ -181,6 +182,9 @@ static NSString * const reuseIdentifier = @"Cell";
 			break;
 			
 	}
+	
+	cell.theLabel.text = [NSString stringWithFormat:@"%li", gametile.score];
+	
 	
 	
 	return cell;
@@ -228,24 +232,23 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void) makeMaze {
 	
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		
-		NSInteger currentRow = 1;
-		NSInteger currentColumn = 1;
-		
+
 		BOOL northChecked = NO;
 		BOOL westChecked = NO;
 		BOOL southChecked = NO;
 		BOOL eastChecked = NO;
 		
 		NSInteger totalTiles = 0;
-		NSInteger tilesVisited = 0;
+		NSInteger tilesVisited = 1;
 		
 		NSMutableArray * undoStack = [NSMutableArray new];
 		
-		GameTile * previous;
+		GameTile * previous = self.datasource[1][1];
+		previous.visited = YES;
+		[undoStack addObject:previous];
 		
-		for (NSMutableArray *column in self.datasource) {
-			for (GameTile * tile in column) {
+		for (NSMutableArray *row in self.datasource) {
+			for (GameTile * tile in row) {
 				if (!tile.isWall) {
 					totalTiles ++;
 				}
@@ -258,140 +261,201 @@ static NSString * const reuseIdentifier = @"Cell";
 			switch (currentDirection) {
 				case north:
 				{
-					NSLog(@"Going north");
+					if (northChecked) {
+						continue;
+					}
+					
+					NSLog(@"Going north checking row: %li, column: %li", previous.row - 2, previous.column);
 					// check if two spaces north is available
 					
-					if (currentRow - 2 <= 0) {
+					if (previous.row - 2 <= 0) {
 						northChecked = YES;
 						NSLog(@"North: Bailing because out of bounds");
 					}
 					else {
 						
-						NSInteger newRow = currentRow - 2;
+						NSInteger newRow = previous.row - 2;
 						
 						// get the corresponding tile
-						GameTile * tile = self.datasource[newRow][currentColumn];
-						tile.type = pilot;
-						previous.type = none;
-						previous = tile;
+						GameTile * tile = self.datasource[newRow][previous.column];
+
 						if (tile.visited == YES) {
 							NSLog(@"North: Bailing because already visited");
 							northChecked = YES;
 						}
 						else {
-							
-							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
-							
 							NSLog(@"North: Updating");
+							northChecked = NO;
+							southChecked = NO;
+							westChecked = NO;
+							eastChecked = NO;
+							
 							tilesVisited ++;
 							// Get the wall, tear it down
-							GameTile * wall = self.datasource[currentRow - 1][currentColumn];
+							GameTile * wall = self.datasource[previous.row - 1][previous.column];
 							wall.isWall = NO;
 							// update tile
 							tile.visited = YES;
-							currentRow = newRow;
-							northChecked = NO;
+							
+							[wall.neighbors addObject: previous];
+							[previous.neighbors addObject:wall];
+							[tile.neighbors addObject: wall];
+							[wall.neighbors addObject:tile];
+							
+							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
+							
+							[undoStack insertObject: tile atIndex:0];
+							previous.type = none;
+							previous = tile;
+							previous.type = pilot;
+							
 						}
 					}
 				}
 					break;
 				case east:
 					
-					if (currentColumn + 2 >= self.numberOfItemsAcross) {
+					if (eastChecked) {
+						continue;
+					}
+					
+					NSLog(@"Going east checking row: %li, column: %li", previous.row, previous.column + 2);
+					
+					if (previous.column + 2 >= self.numberOfItemsAcross) {
 						NSLog(@"East: Bailing because out of bounds");
 						eastChecked = YES;
 					}
 					else {
-						NSInteger newColumn = currentColumn + 2;
-						GameTile * tile = self.datasource[currentRow][newColumn];
-						tile.type = pilot;
-						previous.type = none;
-						previous = tile;
+						NSInteger newColumn = previous.column + 2;
+						GameTile * tile = self.datasource[previous.row][newColumn];
 						if (tile.visited) {
 							NSLog(@"East: Bailing because already visited");
 							eastChecked = YES;
 						}
 						else {
-							
-							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
-							
 							NSLog(@"East: Updating");
+							northChecked = NO;
+							southChecked = NO;
+							westChecked = NO;
+							eastChecked = NO;
+							
 							tilesVisited ++;
 							// Get the wall, tear it down
-							GameTile * wall = self.datasource[currentRow][currentColumn + 1];
+							GameTile * wall = self.datasource[previous.row][previous.column + 1];
 							wall.isWall = NO;
 							// update tile
 							tile.visited = YES;
-							currentColumn = newColumn;
-							eastChecked = NO;
+							
+							[wall.neighbors addObject: previous];
+							[previous.neighbors addObject:wall];
+							[tile.neighbors addObject: wall];
+							[wall.neighbors addObject:tile];
+							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
+							
+							[undoStack insertObject: tile atIndex:0];
+							previous.type = none;
+							previous = tile;
+							previous.type = pilot;
+							
 						}
 					}
 					break;
 				case south:
 				{
+					if (southChecked) {
+						continue;
+					}
+					
+					NSLog(@"Going south checking row: %li, column: %li", previous.row + 2, previous.column);
+					
 					// check if two spaces north is available
 					
-					if (currentRow + 2 >= self.datasource.count) {
+					if (previous.row + 2 >= self.datasource.count) {
 						NSLog(@"South: Bailing because out of bounds");
 						southChecked = YES;
 					}
 					else {
-						NSInteger newRow = currentRow + 2;
+						NSInteger newRow = previous.row + 2;
 						
 						// get the corresponding tile
-						GameTile * tile = self.datasource[newRow][currentColumn];
-						tile.type = pilot;
-						previous.type = none;
-						previous = tile;
+						GameTile * tile = self.datasource[newRow][previous.column];
 						if (tile.visited == YES) {
 							NSLog(@"South: Bailing because already visited");
 							southChecked = YES;
 						}
 						else {
-							
-							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
-							
 							NSLog(@"South: Updating");
+							northChecked = NO;
+							southChecked = NO;
+							westChecked = NO;
+							eastChecked = NO;
+						
 							tilesVisited ++;
 							// Get the wall, tear it down
-							GameTile * wall = self.datasource[currentRow + 1][currentColumn];
+							GameTile * wall = self.datasource[previous.row + 1][previous.column];
 							wall.isWall = NO;
 							// update tile
 							tile.visited = YES;
-							currentRow = newRow;
-							southChecked = NO;
+							
+							[wall.neighbors addObject: previous];
+							[previous.neighbors addObject:wall];
+							[tile.neighbors addObject: wall];
+							[wall.neighbors addObject:tile];
+							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
+							[undoStack insertObject: tile atIndex:0];
+							previous.type = none;
+							previous = tile;
+							previous.type = pilot;
+							
 						}
 					}
 				}
 					break;
 				case west:
-					if (currentColumn - 2 <= 0) {
+					
+					if (westChecked) {
+						continue;
+					}
+					
+					NSLog(@"Going west checking row: %li, column: %li", previous.row, previous.column - 2);
+					
+					if (previous.column - 2 <= 0) {
 						NSLog(@"West: Bailing because out of bounds");
 						westChecked = YES;
 					}
 					else {
-						NSInteger newColumn = currentColumn - 2;
-						GameTile * tile = self.datasource[currentRow][newColumn];
-						tile.type = pilot;
-						previous.type = none;
-						previous = tile;
+						NSInteger newColumn = previous.column - 2;
+						GameTile * tile = self.datasource[previous.row][newColumn];
 						if (tile.visited) {
 							NSLog(@"West: Bailing because already visited");
 							westChecked = YES;
 						}
 						else {
-							
-							[undoStack insertObject:self.datasource[currentRow][currentColumn] atIndex:0];
-							
 							NSLog(@"West: Updating");
+							northChecked = NO;
+							southChecked = NO;
+							westChecked = NO;
+							eastChecked = NO;
+							
 							tilesVisited ++;
 							// Get the wall, tear it down
-							GameTile * wall = self.datasource[currentRow][currentColumn - 1];
+							GameTile * wall = self.datasource[previous.row][previous.column - 1];
 							wall.isWall = NO;
 							// update tile
 							tile.visited = YES;
-							currentColumn = newColumn;
-							westChecked = NO;
+							
+							[wall.neighbors addObject: previous];
+							[previous.neighbors addObject:wall];
+							[tile.neighbors addObject: wall];
+							[wall.neighbors addObject:tile];
+							
+							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
+							
+							[undoStack insertObject: tile atIndex:0];
+							previous.type = none;
+							previous = tile;
+							previous.type = pilot;
+							
 						}
 					}
 					break;
@@ -402,11 +466,11 @@ static NSString * const reuseIdentifier = @"Cell";
 			if (northChecked && southChecked && eastChecked && westChecked) {
 				
 				NSLog(@"Dead end, backing out with %li", (long) undoStack.count);
-				
-				GameTile * previous = undoStack[0];
+
 				[undoStack removeObjectAtIndex:0];
-				currentColumn = previous.column;
-				currentRow = previous.row;
+				previous.type = none;
+				previous = undoStack[0];
+				previous.type = pilot;
 				northChecked = NO;
 				southChecked = NO;
 				westChecked = NO;
@@ -424,6 +488,7 @@ static NSString * const reuseIdentifier = @"Cell";
 				break;
 			}
 		}
+		
 		dispatch_sync(dispatch_get_main_queue(), ^{
 			[self setMarkers];
 		});
@@ -465,7 +530,10 @@ static NSString * const reuseIdentifier = @"Cell";
 	
 	tile.type = goal;
 	self.goal = tile;
+	
+	
 	[self.collectionView reloadData];
+	[self findpath];
 	
 }
 
@@ -610,11 +678,57 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void) findpath {
 	
-	// lets mark all the squares with a score until we reach the goal.
-	//	NSInteger row = self.goal.row;
-	//	NSInteger column = self.goal.column;
 	
-	// Now lets explore every possible path
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+		
+		NSMutableArray * queue = [NSMutableArray new];
+		self.startingPoint.score = 0;
+		[queue addObject:self.startingPoint];
+
+		
+		while (queue.count) {
+			GameTile * currentTile = queue[0];
+			
+			
+			for (GameTile * neighbor in currentTile.neighbors) {
+				
+				if (neighbor.score < 0) {
+					neighbor.score = currentTile.score + 1;
+					[queue addObject:neighbor];
+				}
+			}
+			
+			[queue removeObjectAtIndex:0];
+			
+			dispatch_sync(dispatch_get_main_queue(), ^{
+				[self.collectionView reloadData];
+			});
+		}
+		
+		// now starting at the end point, rewind to stroke the path
+		
+		GameTile * currentTile = self.goal;
+		
+		while(currentTile != self.startingPoint){
+			for (GameTile * neighbor in currentTile.neighbors) {
+				if (neighbor.score < currentTile.score) {
+					if (neighbor != self.startingPoint) {
+						neighbor.type = path;
+					}
+
+					currentTile = neighbor;
+				}
+			}
+		}
+		
+		dispatch_sync(dispatch_get_main_queue(), ^{
+			[self.collectionView reloadData];
+		});
+		
+
+		
+	});
+	
 	
 	
 	
@@ -633,6 +747,8 @@ static NSString * const reuseIdentifier = @"Cell";
 		self.isWall = NO;
 		self.visited = NO;
 		self.type = none;
+		self.neighbors = [NSMutableArray new];
+		self.score = -1;
 	}
 	return self;
 }
