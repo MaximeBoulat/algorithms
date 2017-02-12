@@ -175,14 +175,14 @@
 		NSInteger insert = [self slideFromIndex:i-1 array:array value:person.birthDate];
 		array[insert] = person;
 	}
-	 
+	
 	NSDate * end = [NSDate date];
 	NSTimeInterval duration = [end timeIntervalSinceDate:start];
 	NSLog(@"insertionSort: completed in %f", duration);
 	
-	//	for (Person * person in array) {
-	//		NSLog(@"INSERTION: print person with date: %@", person.birthDate);
-	//	}
+	for (Person * person in array) {
+		NSLog(@"INSERTION: print person with date: %@", person.birthDate);
+	}
 }
 
 
@@ -191,91 +191,62 @@
 	NSInteger insertIndex = index;
 	//	NSLog(@"Coming in with index: %li", index);
 	
-	for (NSUInteger i = index; [((Person *)array[i]).birthDate compare:date] == NSOrderedDescending; i--) {
-		//		NSLog(@"Iterating with index: %li", i);
+	for (NSInteger i = index; i >= 0 && ([((Person *)array[i]).birthDate compare:date] == NSOrderedDescending); i--) {
+
+		
+//				NSLog(@"Iterating with index: %li", i);
 		array[i+1] = array[i];
 		insertIndex = i;
-		
-		if (i==0) {
-			break;
-		}
 	}
 	
 	return insertIndex;
 }
 
 
-+ (NSArray *) mergeSort: (NSArray *) array {
++ (void) mergeSort: (NSMutableArray *) array start: (NSInteger) start end: (NSInteger) end {
 	
-	if (array.count <2) {
-		return array;
+	if (end > start) {
+		NSInteger q = (start + end) / 2;
+		[self mergeSort:array start:start end:q];
+		[self mergeSort:array start:q+1 end:end];
+		[self merge:array start:start midPoint:q end:end];
 	}
-	
-	// split the array
-	
-	NSInteger middleIndex = array.count / 2;
-	
-	NSRange leftRange = NSMakeRange(0, middleIndex);
-	NSRange rightRange = NSMakeRange(middleIndex, array.count - middleIndex);
-	
-	NSArray * leftUnsorted = [array subarrayWithRange:leftRange];
-	NSArray * rightUnsorted = [array subarrayWithRange:rightRange];
-	
-	NSArray * leftSorted = [self mergeSort:leftUnsorted];
-	NSArray * rightSorted = [self mergeSort:rightUnsorted];
-	
-	return [self merge:leftSorted withArray:rightSorted];
-	
 }
 
 
-
-+ (NSArray*) merge: (NSArray *) first withArray: (NSArray *)second {
++ (void) merge: (NSMutableArray *) array start: (NSInteger) start midPoint: (NSInteger) midPoint end: (NSInteger) end {
 	
-	NSMutableArray * result = [@[]mutableCopy];
-	NSInteger indexFirst = 0;
-	NSInteger indexSecond = 0;
+	NSArray * lowHalf = [array subarrayWithRange:NSMakeRange(start, (midPoint - start) + 1)];
+	NSArray * highHalf = [array subarrayWithRange:NSMakeRange(midPoint + 1, end - midPoint)];
 	
-	while (indexFirst <= first.count && indexSecond <= second.count) {
-		
-		if (indexFirst == first.count) {
-			// first array is depleted, append the elements remaining in second to the result
-			
-			NSRange range = NSMakeRange(indexSecond, second.count - indexSecond);
-			[result addObjectsFromArray:[second subarrayWithRange:range]];
-			
+	NSInteger indexLowHalf = 0;
+	NSInteger indexUpperHalf = 0;
+	
+	for (NSInteger i = start; i <= end; i++) {
+		if (indexLowHalf == lowHalf.count) {
+			NSRange rangeOfRemaining = NSMakeRange(indexUpperHalf, highHalf.count - indexUpperHalf);
+			NSArray * remaining = [highHalf subarrayWithRange:rangeOfRemaining];
+			[array replaceObjectsInRange:NSMakeRange(i, remaining.count) withObjectsFromArray:remaining];
 			break;
-		} else if (indexSecond == second.count){
-			// second array is depleted, append the elements remaining in the first to the result
-			
-			NSRange range = NSMakeRange(indexFirst, first.count - indexFirst);
-			[result addObjectsFromArray:[first subarrayWithRange:range]];
+		}
+		if (indexUpperHalf == highHalf.count) {
+			NSRange rangeOfRemaining = NSMakeRange(indexLowHalf, lowHalf.count - indexLowHalf);
+			NSArray * remaining = [lowHalf subarrayWithRange:rangeOfRemaining];
+			[array replaceObjectsInRange:NSMakeRange(i, remaining.count) withObjectsFromArray:remaining];
 			break;
 		}
 		
-		Person * personFirst = first[indexFirst];
-		Person * personSecond = second[indexSecond];
-		
-		if ([personFirst.birthDate compare:personSecond.birthDate] == NSOrderedAscending) {
-			
-			[result addObject:personFirst];
-			indexFirst += 1;
-		}
-		else if ([personFirst.birthDate compare:personSecond.birthDate] == NSOrderedDescending) {
-			[result addObject:personSecond];
-			indexSecond += 1;
+		NSNumber * valueLowHalf = lowHalf[indexLowHalf];
+		NSNumber * valueHighHalf = highHalf[indexUpperHalf];
+		if (valueLowHalf < valueHighHalf) {
+			array[i] = valueLowHalf;
+			indexLowHalf += 1;
 		}
 		else {
-			[result addObject:personFirst];
-			indexFirst += 1;
-			[result addObject:personSecond];
-			indexSecond += 1;
+			array[i] = valueHighHalf;
+			indexUpperHalf += 1;
 		}
 	}
-	
-	
-	
-	return result;
 }
 
 
@@ -306,7 +277,6 @@
 	}
 	
 	[self swap:array from:q to:end];
-	
 	
 	return q;
 }
@@ -439,6 +409,68 @@
 	}
 	
 	return [dates copy];
+	
+}
+
+
++ (NSArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity {
+	
+	NSMutableArray * array = [NSMutableArray new];
+	
+	for (NSInteger i = 0; i < capacity; i++) {
+		
+		NSInteger random = arc4random_uniform(9999);
+		[array addObject:@(random)];
+	}
+	
+	return array;
+}
+
++ (void) pushZeroes: (NSMutableArray *) array {
+	
+	NSInteger length = 0;
+	
+	for (NSInteger i = array.count - 1 ; i >= 0; i--) {
+
+		NSNumber * value = array[i];
+		
+		if (value.intValue == 0) {
+			length += 1;
+		}
+		else if (length != 0) {
+			NSRange range = NSMakeRange(i + 1, length);
+			NSArray * zeroes = [array subarrayWithRange:range];
+			[array removeObjectsInRange:range];
+			[array addObjectsFromArray:zeroes];
+			length = 0;
+		}
+	}
+	
+	NSLog(@"Array after adjustment: %@", array);
+}
+
++ (void) pullZeroes: (NSMutableArray *) array {
+	
+	NSInteger length = 0;
+	
+	for (NSInteger i = 0; i < array.count; i++) {
+		
+		NSNumber * value = array[i];
+		if (value.intValue == 0) {
+			length += 1;
+		}
+		else if (length != 0) {
+			NSRange range = NSMakeRange(i - length, length);
+			NSArray * zeroes = [array subarrayWithRange:range];
+			NSLog(@"Found some zeroes: %@", zeroes);
+			[array removeObjectsInRange:range];
+			
+			[array insertObjects:zeroes atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, length)]];
+			length = 0;
+			
+		}
+	}
+	NSLog(@"Array after adjustment: %@", array);
 	
 }
 

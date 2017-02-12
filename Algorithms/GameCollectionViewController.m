@@ -43,34 +43,18 @@ static NSString * const reuseIdentifier = @"Cell";
 	[super viewDidLoad];
 	
 	self.insetValue = 15;
-	self.numberOfItemsAcross = 13;
-	
-	CGFloat widthOfItem = (self.view.frame.size.width - self.insetValue * 2) / self.numberOfItemsAcross;
-	int availableHeight = (self.view.frame.size.height - (2 * self.insetValue));
-	int numberOfItemsDeep	= availableHeight / widthOfItem;
-	self.datasourceCount = numberOfItemsDeep * self.numberOfItemsAcross;
+	self.numberOfItemsAcross = 25;
 	
 	self.datasource = [NSMutableArray new];
+	[self makeDataSource];
 	
-	for (int i = 0; i < numberOfItemsDeep;  i++) {
-		NSMutableArray * array = [NSMutableArray new];
-		for (int l = 0; l < self.numberOfItemsAcross; l++) {
-			GameTile * tile = [GameTile new];
-			tile.row = i;
-			tile.column = l;
-			if (i % 2 == 0 || l % 2 == 0) {
-				tile.isWall = YES;
-			}
-			
-			//			int r = arc4random_uniform(2);
-			
-			[array addObject:tile];
-		}
-		[self.datasource addObject:array];
-	}
+	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:500];
 	
-	[self makeMaze];
-	//	[self breadthFirstMaze];
+	
+	//[AlgorithmManager pullZeroes:[numbers mutableCopy]];
+	
+//	[self makeMaze];
+//	[self breadthFirstMaze];
 	
 	NSInteger capacity = 3000;
 	
@@ -95,6 +79,17 @@ static NSString * const reuseIdentifier = @"Cell";
 	//	[AlgorithmManager locationSort:people];
 	//	[AlgorithmManager insertionSort:people];
 	
+	NSMutableArray * numbersCopy =  [numbers mutableCopy];
+	
+	NSDate * start = [NSDate date];
+
+	[AlgorithmManager mergeSort: numbersCopy start:0 end:numbers.count - 1];
+	
+	NSDate * end = [NSDate date];
+	NSTimeInterval duration = [end timeIntervalSinceDate:start];
+	NSLog(@"mergeSort: completed in %f", duration);
+	
+	
 	/*
 	 
 	 NSInteger factorial = [AlgorithmManager factorial:12];
@@ -116,14 +111,20 @@ static NSString * const reuseIdentifier = @"Cell";
 	//	NSLog(@"This is the result: %li", result);
 	
 	/*
+	
 	 NSDate * start = [NSDate date];
 	 NSArray * sorted = [AlgorithmManager mergeSort:people];
-	 
+	
+	for (Person * person in sorted) {
+		
+		NSLog(@"This is the birthdate: %@", person.birthDate);
+	}
+	
 	 NSDate * end = [NSDate date];
 	 NSTimeInterval duration = [end timeIntervalSinceDate:start];
 	 NSLog(@"mergeSort: completed in %f", duration);
 	 
-	 
+	
 	 
 	 start = [NSDate date];
 	 [AlgorithmManager doQuickSort:people startIndex:0 endIndex:people.count - 1];
@@ -182,12 +183,22 @@ static NSString * const reuseIdentifier = @"Cell";
 			break;
 			
 	}
-	
-	cell.theLabel.text = [NSString stringWithFormat:@"%li", gametile.score];
+	if (gametile.isWall || gametile.score < 0) {
+		cell.theLabel.hidden = YES;
+	}
+	else {
+		cell.theLabel.hidden = NO;
+		cell.theLabel.text = [NSString stringWithFormat:@"%li", gametile.score];
+	}
+
 	
 	
 	
 	return cell;
+}
+
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+	[self makeMaze];
 }
 
 /*
@@ -728,10 +739,34 @@ static NSString * const reuseIdentifier = @"Cell";
 
 		
 	});
+
 	
+}
+
+- (void) makeDataSource {
+	[self.datasource removeAllObjects];
 	
+	CGFloat widthOfItem = (self.view.frame.size.width - self.insetValue * 2) / self.numberOfItemsAcross;
+	int availableHeight = (self.view.frame.size.height - (2 * self.insetValue));
+	int numberOfItemsDeep	= availableHeight / widthOfItem;
+	self.datasourceCount = numberOfItemsDeep * self.numberOfItemsAcross;
 	
-	
+	for (int i = 0; i < numberOfItemsDeep;  i++) {
+		NSMutableArray * array = [NSMutableArray new];
+		for (int l = 0; l < self.numberOfItemsAcross; l++) {
+			GameTile * tile = [GameTile new];
+			tile.row = i;
+			tile.column = l;
+			if (i % 2 == 0 || l % 2 == 0) {
+				tile.isWall = YES;
+			}
+			
+			//			int r = arc4random_uniform(2);
+			
+			[array addObject:tile];
+		}
+		[self.datasource addObject:array];
+	}
 }
 
 @end

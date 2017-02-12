@@ -18,7 +18,7 @@
 + (void) locationSort: (NSMutableArray *) array;
 + (void) insertionSort: (NSMutableArray *) array;
 + (NSInteger) slideFromIndex: (NSInteger) index array: (NSMutableArray *) array value: (NSDate *) date;
-+ (NSArray *) mergeSort: (NSArray *) array;
++ (void) mergeSort: (NSMutableArray *) array start: (NSInteger) start end: (NSInteger) end;
 + (void) doQuickSort: (NSMutableArray *) array startIndex: (NSInteger) start endIndex: (NSInteger) end;
 + (NSInteger) factorial: (NSInteger) value;
 + (NSInteger) recursiveFactorial: (NSInteger) n;
@@ -27,6 +27,10 @@
 
 + (NSArray *) makeArrayOfNamesWithCapacity: (NSInteger) capacity;
 + (NSArray *) makeArrayOfDatesWithCapacity: (NSInteger) capacity;
+
++ (NSArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity;
++ (void) pushZeroes: (NSMutableArray *) array;
++ (void) pullZeroes: (NSMutableArray *) array ;
 
 @end
 
