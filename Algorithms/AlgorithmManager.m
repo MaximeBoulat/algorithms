@@ -8,6 +8,8 @@
 
 #import "AlgorithmManager.h"
 
+
+
 @implementation AlgorithmManager
 
 #pragma mark - Binary Search
@@ -128,9 +130,9 @@
 	for (int i = 0; i<array.count; i++) {
 		//		NSLog(@"Iterating with index: %li", i);
 		NSInteger indexOfSmallest = [self indexOfSmallestWithStartingIndex:i andArray: array];
-		Person * oldest = array[indexOfSmallest];
+		NSNumber * smallest = array[indexOfSmallest];
 		[array removeObjectAtIndex:indexOfSmallest];
-		[array insertObject:oldest atIndex:i];
+		[array insertObject:smallest atIndex:i];
 	}
 	
 	NSDate * end = [NSDate date];
@@ -145,18 +147,18 @@
 
 + (NSInteger) indexOfSmallestWithStartingIndex: (NSInteger) index andArray: (NSMutableArray *) array {
 	
-	NSDate * smallestDate = ((Person *)array[index]).birthDate;
+	NSNumber * smallest = array[index];
 	NSInteger indexOfSmallest = index;
 	
 	//	NSLog(@"What is the array count: %i", array.count);
 	
 	for (NSInteger i = index + 1; i < array.count; i++) {
 		//		NSLog(@"Iterating2 with index: %i", i);
-		Person * person = array[i];
+		NSNumber * value = array[i];
 		//		NSLog(@"Comparing birthdate: %@ with reference: %@", person.birthDate, smallestDate);
-		if ([person.birthDate compare:smallestDate] == NSOrderedAscending) {
+		if (value < smallest) {
 			//			NSLog(@"Test passed!, returning index: %i", i);
-			smallestDate = person.birthDate;
+			smallest = value;
 			indexOfSmallest = i;
 		}
 	}
@@ -170,31 +172,23 @@
 	NSDate * start = [NSDate date];
 	
 	for (NSInteger i = 1; i < array.count; i++) {
-		//		NSLog(@"iterating1 with i: %li", i);
-		Person * person = (Person *)array[i];
-		NSInteger insert = [self slideFromIndex:i-1 array:array value:person.birthDate];
-		array[insert] = person;
+		NSNumber * value = array[i];
+		NSInteger insert = [self slideFromIndex:i-1 array:array value:value];
+		array[insert] = value;
 	}
 	
 	NSDate * end = [NSDate date];
 	NSTimeInterval duration = [end timeIntervalSinceDate:start];
 	NSLog(@"insertionSort: completed in %f", duration);
-	
-	for (Person * person in array) {
-		NSLog(@"INSERTION: print person with date: %@", person.birthDate);
-	}
+
 }
 
 
-+ (NSInteger) slideFromIndex: (NSInteger) index array: (NSMutableArray *) array value: (NSDate *) date {
++ (NSInteger) slideFromIndex: (NSInteger) index array: (NSMutableArray *) array value: (NSNumber *) value {
 	
 	NSInteger insertIndex = index;
-	//	NSLog(@"Coming in with index: %li", index);
 	
-	for (NSInteger i = index; i >= 0 && ([((Person *)array[i]).birthDate compare:date] == NSOrderedDescending); i--) {
-
-		
-//				NSLog(@"Iterating with index: %li", i);
+	for (NSInteger i = index; i >= 0 && array[i] > value; i--) {
 		array[i+1] = array[i];
 		insertIndex = i;
 	}
@@ -252,7 +246,7 @@
 
 + (void) doQuickSort: (NSMutableArray *) array startIndex: (NSInteger) start endIndex: (NSInteger) end {
 	
-	if (start < end) {
+	if (end > start) {
 		NSInteger newPivotIndex = [self partition:array start: start end: end];
 		
 		[self doQuickSort:array startIndex: start endIndex: newPivotIndex - 1];
@@ -262,15 +256,12 @@
 
 + (NSInteger ) partition: (NSMutableArray *) array start: (NSInteger) start end: (NSInteger) end {
 	
-	
 	NSInteger q = start;
-	NSDate * referenceDate = ((Person *)array[end]).birthDate;
-	
+	NSDate * reference = array[end];
 	
 	for (NSInteger j = start; j < end; j++) {
-		Person * incoming = array[j];
 		
-		if ([incoming.birthDate compare:referenceDate]==NSOrderedAscending) {
+		if (array[j] < reference) {
 			[self swap:array from:j to:q];
 			q++;
 		}
@@ -283,9 +274,9 @@
 
 + (void) swap:(NSMutableArray *) array from: (NSInteger) from to: (NSInteger) to {
 	
-	Person * person = array [from];
+	id thing = array [from];
 	array[from] = array[to];
-	array[to] = person;
+	array[to] = thing;
 	
 }
 
@@ -362,6 +353,22 @@
 
 #pragma mark - Helpers
 
++ (NSMutableArray *) makeArrayOfPeopleWithCapacity: (NSInteger) capacity {
+	
+	NSArray * names = [AlgorithmManager makeArrayOfNamesWithCapacity:capacity];
+	NSArray * dates = [AlgorithmManager makeArrayOfDatesWithCapacity:capacity];
+	NSMutableArray * people = [NSMutableArray new];
+	
+	for (int i = 0; i<capacity ; i++) {
+		NSDate * date = dates[i];
+		NSString * name = names[i];
+		
+		Person * person = [[Person alloc]initWithDate:date andName:name];
+		[people addObject:person];
+	}
+	return people;
+}
+
 + (NSArray *) makeArrayOfNamesWithCapacity: (NSInteger) capacity {
 	
 	NSArray * names = @[@"Kevin",
@@ -426,6 +433,8 @@
 	return array;
 }
 
+#pragma mark - Interview questions
+
 + (void) pushZeroes: (NSMutableArray *) array {
 	
 	NSInteger length = 0;
@@ -474,6 +483,163 @@
 	
 }
 
++ (void) removeDuplicates: (NSMutableArray *) array {
+	
+	NSCountedSet * bag = [NSCountedSet new];
+	
+	NSInteger i = 0;
+	while (i < array.count) {
+		Person * person = array[i];
+		if ([bag countForObject:person.firstName]) {
+			[array removeObjectAtIndex:i];
+		}
+		else {
+			[bag addObject:person.firstName];
+			i++;
+		}
+	}
+}
+
++ (void) binaryTreeToList: (BinaryTree *) tree {
+	
+	
+	NSMutableArray * queue = [NSMutableArray new];
+	TreeNode * rootNode = tree.root;
+	[queue addObject:rootNode];
+	
+	NSMutableArray * linkedList = [NSMutableArray new];
+	
+	[self doDepthFirstSearch:linkedList node: rootNode];
+	
+	NSLog(@"Finished traversing the binary tree with array: %@", linkedList);
+}
+
++ (void) doBreadthFirstSearch: (NSMutableArray *) array queue: (NSMutableArray *) queue {
+
+	
+	if (!queue.count) {
+		return;
+	}
+	
+	TreeNode * node = queue [0];
+	[array addObject:node.value];
+	
+	if (node.leftChild) {
+		[queue addObject:node.leftChild];
+	}
+	if (node.rightChild) {
+		[queue addObject:node.rightChild];
+	}
+	
+	[queue removeObjectAtIndex:0];
+	[self doBreadthFirstSearch:array queue:queue];
+	
+}
+
++ (void) doDepthFirstSearch: (NSMutableArray *) array node: (TreeNode *) node {
+
+	if (node) {
+		[self doDepthFirstSearch:array node:node.leftChild];
+		[array addObject:node.value];
+		[self doDepthFirstSearch:array node:node.rightChild];
+	}
+}
+
++ (LinkedList *) makeLinkedListFromArray: (NSArray *) array {
+	
+	LinkedList * list = [LinkedList new];
+	
+	for (NSNumber * number in array) {
+		[list insertValue:number];
+	}
+	
+	return list;
+}
+
++ (void) setupPermutations {
+	
+	NSDictionary * map = @{@2 : @[@"A", @"B", @"C"],
+						   @3 : @[@"D", @"E", @"F"],
+						   @4 : @[@"G", @"H", @"I"],
+								 @5 : @[@"J", @"K", @"L"],
+						   @6 : @[@"M", @"N", @"O"],
+						   @7 : @[@"P", @"Q", @"R", @"S"],
+								 @8 : @[@"T", @"U", @"V"]};
+	
+	NSArray * input = @[@4, @6, @7];
+	NSMutableArray * output = [NSMutableArray new];
+	
+	[self doPermutationsWithMap:map input:input output:output index:0 payload:@""];
+	
+}
+
+
++ (void) doPermutationsWithMap: (NSDictionary *) map input: (NSArray *) input output: (NSMutableArray *) output index: (NSInteger) index payload: (NSString *) payload  {
+
+	if (index == input.count) {
+		[output addObject:payload];
+		return;
+	}
+	
+	NSNumber * key = input[index];
+
+	NSArray * options = [map objectForKey:key];
+	
+	for (NSInteger i = 0; i < options.count; i++) {
+		NSString * newPayload = [payload copy];
+		newPayload = [newPayload stringByAppendingString:options[i]];
+		[self doPermutationsWithMap:map input:input output:output index:index + 1 payload:newPayload];
+	}
+}
+
++ (UIView *) findCommonSuperview: (UIView *) first and: (UIView*) second {
+
+	// Build a stack
+	
+	NSMutableArray * pathOne = [NSMutableArray new];
+	UIView * superView = first.superview;
+	
+	while (superView) {
+		[pathOne addObject:superView];
+		superView = superView.superview;
+	}
+	
+	NSMutableArray * pathTwo = [NSMutableArray new];
+	superView = second.superview;
+	
+	while (superView) {
+		[pathTwo addObject:superView];
+		superView = superView.superview;
+	}
+
+	// compare both stacks
+	
+	UIView * commonSuperview;
+	
+	for (NSInteger i = 0; i < pathOne.count || i < pathTwo.count; i++) {
+		UIView * superview1 = pathOne [i];
+		UIView * superview2 = pathTwo [i];
+		
+		if (superview1 == superview2) {
+			commonSuperview = superview1;
+			break;
+		}
+	}
+
+	return commonSuperview;
+}
+
++ (void) divide: (NSInteger) total by: (NSInteger) value {
+	
+	NSInteger coefficient = 0;
+	
+	for (NSInteger i = 0; i < total; i ++) {
+		if (i * value <= total) {
+			coefficient = i;
+		}
+	}
+}
+
 
 @end
 
@@ -501,6 +667,27 @@
 	else {
 		return NSOrderedSame;
 	}
+}
+
+
+@end
+
+@implementation Item
+
+
+
+
+@end
+
+@implementation PermutationOperation
+
+- (instancetype)init
+{
+	self = [super init];
+	if (self) {
+		self.payload = @"";
+	}
+	return self;
 }
 
 

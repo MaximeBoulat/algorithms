@@ -9,6 +9,7 @@
 #import "GameCollectionViewController.h"
 #import "TileCollectionViewCell.h"
 #import "AlgorithmManager.h"
+#import "BinaryTree.h"
 
 @interface GameCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -48,47 +49,65 @@ static NSString * const reuseIdentifier = @"Cell";
 	self.datasource = [NSMutableArray new];
 	[self makeDataSource];
 	
-	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:500];
-	
-	
-	//[AlgorithmManager pullZeroes:[numbers mutableCopy]];
-	
 //	[self makeMaze];
 //	[self breadthFirstMaze];
 	
-	NSInteger capacity = 3000;
-	
-	NSArray * names = [AlgorithmManager makeArrayOfNamesWithCapacity:capacity];
-	NSArray * dates = [AlgorithmManager makeArrayOfDatesWithCapacity:capacity];
-	NSMutableArray * people = [NSMutableArray new];
-	
-	for (int i = 0; i<capacity ; i++) {
-		NSDate * date = dates[i];
-		NSString * name = names[i];
-		
-		Person * person = [[Person alloc]initWithDate:date andName:name];
-		[people addObject:person];
-	}
 	
 	//	[AlgorithmManager doBinarySearch];
 	//
-	//	[AlgorithmManager compareSort:names];
+
 	//	[AlgorithmManager sortDescriptorsSort:people];
 	//	[AlgorithmManager compareSort2:people];
 	//	[AlgorithmManager blockCompare:people];
-	//	[AlgorithmManager locationSort:people];
-	//	[AlgorithmManager insertionSort:people];
-	
-	NSMutableArray * numbersCopy =  [numbers mutableCopy];
-	
-	NSDate * start = [NSDate date];
 
-	[AlgorithmManager mergeSort: numbersCopy start:0 end:numbers.count - 1];
 	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"mergeSort: completed in %f", duration);
 	
+	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:255];
+	
+	/*
+	
+	BinaryTree * newTree = [BinaryTree new];
+	
+	for (NSNumber * number in numbers) {
+		[newTree insertValue:number];
+	}
+	
+	[AlgorithmManager binaryTreeToList:newTree];
+	
+	*/
+	
+	/*
+	LinkedList * newList = [AlgorithmManager makeLinkedListFromArray:numbers];
+	
+	LinkedListItem * item = newList.head;
+	
+	[newList printList];
+	[newList swapNodes];
+	 */
+	
+	
+	[AlgorithmManager setupPermutations];
+	
+//	[AlgorithmManager pullZeroes:[numbers mutableCopy]];
+
+//	NSMutableArray * numbersCopy = [numbers mutableCopy];
+//	[AlgorithmManager compareSort:numbersCopy];
+//	numbersCopy = [numbers mutableCopy];
+//	[AlgorithmManager locationSort:numbersCopy];
+//	numbersCopy = [numbers mutableCopy];
+//	[AlgorithmManager insertionSort:numbersCopy];
+//	numbersCopy = [numbers mutableCopy];
+//	NSDate * start = [NSDate date];
+//	[AlgorithmManager mergeSort: numbersCopy start:0 end:numbers.count - 1];
+//	NSDate * end = [NSDate date];
+//	NSTimeInterval duration = [end timeIntervalSinceDate:start];
+//	NSLog(@"mergeSort: completed in %f", duration);
+//	numbersCopy = [numbers mutableCopy] ;
+//	start = [NSDate date];
+//	[AlgorithmManager doQuickSort: numbersCopy startIndex:0 endIndex:numbers.count - 1];
+//	end = [NSDate date];
+//	duration = [end timeIntervalSinceDate:start];
+//	NSLog(@"quicksort: completed in %f", duration);
 	
 	/*
 	 
@@ -110,33 +129,30 @@ static NSString * const reuseIdentifier = @"Cell";
 	//	NSInteger result = [AlgorithmManager calculate:9 toThePowerOf:6];
 	//	NSLog(@"This is the result: %li", result);
 	
-	/*
 	
-	 NSDate * start = [NSDate date];
-	 NSArray * sorted = [AlgorithmManager mergeSort:people];
+//	NSInteger capacity = 30;
+//	NSMutableArray * people = [AlgorithmManager makeArrayOfPeopleWithCapacity:capacity];
+//	[AlgorithmManager removeDuplicates:people];
 	
-	for (Person * person in sorted) {
-		
-		NSLog(@"This is the birthdate: %@", person.birthDate);
-	}
 	
-	 NSDate * end = [NSDate date];
-	 NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	 NSLog(@"mergeSort: completed in %f", duration);
-	 
-	
-	 
-	 start = [NSDate date];
-	 [AlgorithmManager doQuickSort:people startIndex:0 endIndex:people.count - 1];
-	 
-	 end = [NSDate date];
-	 duration = [end timeIntervalSinceDate:start];
-	 NSLog(@"quicksort: completed in %f", duration);
-	 
-	 */
-	
+	[AlgorithmManager divide:10 by:2];
 	
 }
+
+- (void) viewDidAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	NSArray * tiles = self.collectionView.visibleCells;
+	
+	UIView * tile1 = tiles[arc4random_uniform(tiles.count)];
+	UIView * tile2 = tiles[arc4random_uniform(tiles.count)];
+	
+	UIView * superview = [AlgorithmManager findCommonSuperview:tile1 and:tile2];
+	
+	NSLog(@"Found the common superview? %@", superview);
+}
+
+
 
 #pragma mark CollectionView methods
 
@@ -736,10 +752,7 @@ static NSString * const reuseIdentifier = @"Cell";
 			[self.collectionView reloadData];
 		});
 		
-
-		
 	});
-
 	
 }
 

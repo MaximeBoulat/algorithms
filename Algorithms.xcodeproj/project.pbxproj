@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		6A3FD4041E4AAFA0008AEBC1 /* SierpinskyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3FD4031E4AAFA0008AEBC1 /* SierpinskyViewController.m */; };
 		6A3FD4071E4AB00A008AEBC1 /* ContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A3FD4061E4AB00A008AEBC1 /* ContainerViewController.m */; };
+		6A49D7DA1E5275A20069DBDE /* ViewHierarchyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A49D7D91E5275A20069DBDE /* ViewHierarchyViewController.m */; };
 		6A6271991E46D7650017BE54 /* TileCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A6271981E46D7650017BE54 /* TileCollectionViewCell.m */; };
 		6A9769DD1E4581B000C0800C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9769DC1E4581B000C0800C /* main.m */; };
 		6A9769E01E4581B000C0800C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9769DF1E4581B000C0800C /* AppDelegate.m */; };
@@ -16,6 +17,7 @@
 		6A9769E81E4581B000C0800C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A9769E71E4581B000C0800C /* Assets.xcassets */; };
 		6A9769EB1E4581B000C0800C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A9769E91E4581B000C0800C /* LaunchScreen.storyboard */; };
 		6A9769F41E4583A000C0800C /* GameCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9769F31E4583A000C0800C /* GameCollectionViewController.m */; };
+		6AF6DBAB1E512459009C2AAC /* BinaryTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF6DBAA1E512459009C2AAC /* BinaryTree.m */; };
 		6AFF822D1E4E44B500B30813 /* AlgorithmManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */; };
 		6AFF82301E4E883800B30813 /* CribSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AFF822F1E4E883800B30813 /* CribSheet.m */; };
 /* End PBXBuildFile section */
@@ -25,6 +27,8 @@
 		6A3FD4031E4AAFA0008AEBC1 /* SierpinskyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SierpinskyViewController.m; sourceTree = "<group>"; };
 		6A3FD4051E4AB00A008AEBC1 /* ContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerViewController.h; sourceTree = "<group>"; };
 		6A3FD4061E4AB00A008AEBC1 /* ContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContainerViewController.m; sourceTree = "<group>"; };
+		6A49D7D81E5275A20069DBDE /* ViewHierarchyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHierarchyViewController.h; sourceTree = "<group>"; };
+		6A49D7D91E5275A20069DBDE /* ViewHierarchyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewHierarchyViewController.m; sourceTree = "<group>"; };
 		6A6271971E46D7650017BE54 /* TileCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TileCollectionViewCell.h; sourceTree = "<group>"; };
 		6A6271981E46D7650017BE54 /* TileCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TileCollectionViewCell.m; sourceTree = "<group>"; };
 		6A9769D81E4581B000C0800C /* Algorithms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Algorithms.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,6 +41,8 @@
 		6A9769EC1E4581B000C0800C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A9769F21E4583A000C0800C /* GameCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCollectionViewController.h; sourceTree = "<group>"; };
 		6A9769F31E4583A000C0800C /* GameCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCollectionViewController.m; sourceTree = "<group>"; };
+		6AF6DBA91E512459009C2AAC /* BinaryTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BinaryTree.h; sourceTree = "<group>"; };
+		6AF6DBAA1E512459009C2AAC /* BinaryTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BinaryTree.m; sourceTree = "<group>"; };
 		6AFF822B1E4E44B500B30813 /* AlgorithmManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmManager.h; sourceTree = "<group>"; };
 		6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmManager.m; sourceTree = "<group>"; };
 		6AFF822E1E4E883800B30813 /* CribSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CribSheet.h; sourceTree = "<group>"; };
@@ -54,6 +60,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A03E5EA1E52743700AF4DFA /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				6A3FD4051E4AB00A008AEBC1 /* ContainerViewController.h */,
+				6A3FD4061E4AB00A008AEBC1 /* ContainerViewController.m */,
+				6A9769F21E4583A000C0800C /* GameCollectionViewController.h */,
+				6A9769F31E4583A000C0800C /* GameCollectionViewController.m */,
+				6A49D7D81E5275A20069DBDE /* ViewHierarchyViewController.h */,
+				6A49D7D91E5275A20069DBDE /* ViewHierarchyViewController.m */,
+				6A3FD4021E4AAFA0008AEBC1 /* SierpinskyViewController.h */,
+				6A3FD4031E4AAFA0008AEBC1 /* SierpinskyViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
 		6A9769CF1E4581AF00C0800C = {
 			isa = PBXGroup;
 			children = (
@@ -75,16 +96,13 @@
 			children = (
 				6A9769DE1E4581B000C0800C /* AppDelegate.h */,
 				6A9769DF1E4581B000C0800C /* AppDelegate.m */,
-				6A3FD4051E4AB00A008AEBC1 /* ContainerViewController.h */,
-				6A3FD4061E4AB00A008AEBC1 /* ContainerViewController.m */,
-				6A9769F21E4583A000C0800C /* GameCollectionViewController.h */,
-				6A9769F31E4583A000C0800C /* GameCollectionViewController.m */,
+				6A03E5EA1E52743700AF4DFA /* View Controllers */,
 				6AFF822E1E4E883800B30813 /* CribSheet.h */,
 				6AFF822F1E4E883800B30813 /* CribSheet.m */,
 				6AFF822B1E4E44B500B30813 /* AlgorithmManager.h */,
 				6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */,
-				6A3FD4021E4AAFA0008AEBC1 /* SierpinskyViewController.h */,
-				6A3FD4031E4AAFA0008AEBC1 /* SierpinskyViewController.m */,
+				6AF6DBA91E512459009C2AAC /* BinaryTree.h */,
+				6AF6DBAA1E512459009C2AAC /* BinaryTree.m */,
 				6A6271971E46D7650017BE54 /* TileCollectionViewCell.h */,
 				6A6271981E46D7650017BE54 /* TileCollectionViewCell.m */,
 				6A9769E41E4581B000C0800C /* Main.storyboard */,
@@ -177,7 +195,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A9769E01E4581B000C0800C /* AppDelegate.m in Sources */,
+				6AF6DBAB1E512459009C2AAC /* BinaryTree.m in Sources */,
 				6A6271991E46D7650017BE54 /* TileCollectionViewCell.m in Sources */,
+				6A49D7DA1E5275A20069DBDE /* ViewHierarchyViewController.m in Sources */,
 				6A3FD4071E4AB00A008AEBC1 /* ContainerViewController.m in Sources */,
 				6A9769F41E4583A000C0800C /* GameCollectionViewController.m in Sources */,
 				6AFF822D1E4E44B500B30813 /* AlgorithmManager.m in Sources */,

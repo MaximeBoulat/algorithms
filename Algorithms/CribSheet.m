@@ -44,6 +44,10 @@
 			
 		});
 	
+	#pragma mark - Random
+	
+	NSInteger random = arc4random_uniform(4);
+	
 }
 
 
