@@ -9,7 +9,7 @@
 #import "GameCollectionViewController.h"
 #import "TileCollectionViewCell.h"
 #import "AlgorithmManager.h"
-#import "BinaryTree.h"
+#import "Algorithms-Swift.h"
 
 @interface GameCollectionViewController () <UICollectionViewDelegateFlowLayout>
 
@@ -21,6 +21,7 @@
 
 @property (nonatomic, retain) GameTile * startingPoint;
 @property (nonatomic, retain) GameTile * goal;
+@property (nonatomic, strong) EnumeratorSwift * enumerator;
 
 @end
 
@@ -62,7 +63,21 @@ static NSString * const reuseIdentifier = @"Cell";
 
 	
 	
-	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:255];
+	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:9];
+	
+//	[AlgorithmManagerSwift pushZeroesWithArray:numbers];
+//	[AlgorithmManagerSwift removeDuplicatesWithArray: numbers];
+	
+	BinaryTreeSwift * binaryTreeSwift = [BinaryTreeSwift new];
+	for (NSNumber * number in numbers) {
+		[binaryTreeSwift insertValueWithValue: number.integerValue];
+	}
+	
+//	[AlgorithmManagerSwift binaryTreeToListWithTree:binaryTreeSwift];
+	
+//	[AlgorithmManagerSwift setupPermutations];
+	
+//	AlgorithmManagerSwift * jbjbj;
 	
 	/*
 	
@@ -76,17 +91,26 @@ static NSString * const reuseIdentifier = @"Cell";
 	
 	*/
 	
-	/*
-	LinkedList * newList = [AlgorithmManager makeLinkedListFromArray:numbers];
 	
-	LinkedListItem * item = newList.head;
+//	LinkedList * newList = [AlgorithmManager makeLinkedListFromArray:numbers];
+	LinkedListSwift * newList = [LinkedListSwift new];
 	
-	[newList printList];
-	[newList swapNodes];
-	 */
+	for (NSNumber * number in numbers) {
+		[newList insertValueWithValue:number.integerValue];
+	}
+	
+	[newList.head recursivePrint];
+	NSLog(@"===========================");
+
+	LinkedListItemSwift * newHead = newList.head.next;
+	[AlgorithmManagerSwift swapNodesWithNode:newList.head];
+	newList.head = newHead;
+
+	[newList.head recursivePrint];
+	
+//	[newList printList];
 	
 	
-	[AlgorithmManager setupPermutations];
 	
 //	[AlgorithmManager pullZeroes:[numbers mutableCopy]];
 
@@ -134,22 +158,39 @@ static NSString * const reuseIdentifier = @"Cell";
 //	NSMutableArray * people = [AlgorithmManager makeArrayOfPeopleWithCapacity:capacity];
 //	[AlgorithmManager removeDuplicates:people];
 	
+	/*
+	 
+	 [AlgorithmManager divide:10 by:2];
+	 [AlgorithmManager setupPermutations];
+	 
+	 */ 
 	
-	[AlgorithmManager divide:10 by:2];
+	NSArray * data = @[ @3,@[@8, @8, @17, @[@6, @7], @9], @3, @9, @[@42, @1, @7, @[@34, @12, @9], @7, @17], @45];
+	self.enumerator = [[EnumeratorSwift alloc]initWithData:data];
+//	NSArray * allObjects = [self.enumerator allObjects];
+	
+
+	
+//	NSLog(@"returning all objects: %@", allObjects);
+	
 	
 }
 
 - (void) viewDidAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
+	/*
 	NSArray * tiles = self.collectionView.visibleCells;
 	
 	UIView * tile1 = tiles[arc4random_uniform(tiles.count)];
 	UIView * tile2 = tiles[arc4random_uniform(tiles.count)];
 	
 	UIView * superview = [AlgorithmManager findCommonSuperview:tile1 and:tile2];
+//	UIView * common = [AlgorithmManagerSwift findCommonAncestorWithI:tile1 m:tile2];
 	
 	NSLog(@"Found the common superview? %@", superview);
+	 */
+	 
 }
 
 
@@ -214,7 +255,10 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-	[self makeMaze];
+//	[self makeMaze];
+	
+	NSLog(@"This is the return value: %@", [self.enumerator next]);
+	
 }
 
 /*

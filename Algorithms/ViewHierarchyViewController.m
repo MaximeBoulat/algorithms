@@ -7,10 +7,11 @@
 //
 
 #import "ViewHierarchyViewController.h"
+#import "Algorithms-Swift.h"
 
 @interface ViewHierarchyViewController ()
 
-@property (weak, nonatomic) IBOutlet UIView *testView;
+
 
 
 @end
@@ -22,6 +23,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+	
+	UIView * commonAncestor = [AlgorithmManagerSwift findCommonAncestorWithI:self.testView m:self.testView2];
+	
+	NSLog(@"Found common ancestor with tag: %li", commonAncestor.tag);
 }
 
 - (void)didReceiveMemoryWarning {

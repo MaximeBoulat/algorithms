@@ -91,13 +91,33 @@
 	}
 }
 
-- (IBAction)didPressScan:(id)sender {
+- (IBAction)findPathToSubview {
 	
 	NSMutableArray * path = [NSMutableArray new];
 	
-	UIView * superView = self.view1.test
+	UIView * superView = self.view1.testView.superview;
+	UIView * subview = self.view1.testView;
 	
+	while (superView != self.view1.view.superview) {
+		NSInteger index = [superView.subviews indexOfObject:subview];
+		[path insertObject:@(index) atIndex:0];
+		subview = superView;
+		superView = superView.superview;
+	}
 	
+	NSArray * subviews = self.view2.view.subviews;
+	UIView * target;
+	
+	while (path.count) {
+		NSNumber * index = path[0];
+		[path removeObjectAtIndex:0];
+		target = subviews[index.integerValue];
+		subviews = target.subviews;
+	}
+	
+	if (target == self.view2.testView) {
+		NSLog(@"Found the target!!!!");
+	}
 }
 
 @end

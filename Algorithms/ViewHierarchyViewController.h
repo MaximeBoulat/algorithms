@@ -10,4 +10,7 @@
 
 @interface ViewHierarchyViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UIView *testView;
+@property (weak, nonatomic) IBOutlet UIView *testView2;
+
 @end

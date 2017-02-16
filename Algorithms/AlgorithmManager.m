@@ -426,7 +426,7 @@
 	
 	for (NSInteger i = 0; i < capacity; i++) {
 		
-		NSInteger random = arc4random_uniform(9999);
+		NSInteger random = arc4random_uniform(100);
 		[array addObject:@(random)];
 	}
 	
@@ -612,18 +612,23 @@
 		superView = superView.superview;
 	}
 
-	// compare both stacks
 	
-	UIView * commonSuperview;
+	UIView * commonSuperview = nil;
 	
-	for (NSInteger i = 0; i < pathOne.count || i < pathTwo.count; i++) {
-		UIView * superview1 = pathOne [i];
-		UIView * superview2 = pathTwo [i];
+	while (pathOne.count && pathTwo.count) {
+		UIView * view1 = [pathOne lastObject];
+		UIView * view2 = [pathTwo lastObject];
 		
-		if (superview1 == superview2) {
-			commonSuperview = superview1;
+		if (view1 == view2) {
+			commonSuperview = view1;
+		}
+		else {
 			break;
 		}
+		
+		[pathOne removeLastObject];
+		[pathTwo removeLastObject];
+	
 	}
 
 	return commonSuperview;
@@ -639,6 +644,8 @@
 		}
 	}
 }
+
+
 
 
 @end
@@ -688,6 +695,216 @@
 		self.payload = @"";
 	}
 	return self;
+}
+
+
+@end
+
+
+
+@implementation Enumerator
+
+- (instancetype)initWithData: (NSArray *) data
+{
+	self = [super init];
+	if (self) {
+		self.data = data;
+		self.currentIndex = 0;
+	}
+	return self;
+}
+
+- (NSNumber *) next {
+
+	if (self.currentIndex == self.data.count) { // out of bounds, bail
+		return nil;
+	}
+	else {
+		if (self.enumerator) { // we already have an enumerator set up, try to step through it
+			id success = [self.enumerator next];
+			
+			if (success) {
+				return success;
+			}
+			else { // the enumerator bailed, move to the next index
+				self.enumerator = nil;
+				return [self moveToNextIndex];
+			}
+		}
+		else {
+			return [self moveToNextIndex];
+		}
+	}
+}
+
+- (NSNumber *) moveToNextIndex {
+	
+	NSInteger current = self.currentIndex;
+	self.currentIndex += 1;
+	
+//		NSArray * data = @[ @3,@[@8, @8, @17, @[@6, @7], @9], @3, @9, @[@42, @1, @7, @[@34, @12, @9], @7, @17], @45];
+	
+	if ([self.data[current] isKindOfClass:[NSArray class]]) { // Setup a new enumerator
+		self.enumerator = [[Enumerator alloc]initWithData: self.data[current]];
+		return self.enumerator.next;
+	}
+	else {
+		return self.data[current];
+	}
+}
+
+- (NSArray *) allObjects {
+	
+	NSMutableArray * retval = [NSMutableArray new];
+	
+	for (NSInteger i = 0; i < self.data.count; i++) {
+		if ([self.data [i] isKindOfClass:[NSArray class]]){
+			Enumerator * enumerator = [[Enumerator alloc]initWithData:self.data [i]];
+			NSArray * objects = [enumerator allObjects];
+			[retval addObjectsFromArray:objects];
+		}
+		else {
+			[retval addObject:self.data [i]];
+		}
+	}
+	
+	return retval;
+}
+
+
+@end
+
+
+@implementation BinaryTree
+
+- (void) insertValue: (NSNumber *) value {
+	
+	TreeNode * node = [TreeNode new];
+	node.value = value;
+	
+	
+	if (!self.root) {
+		self.root = node;
+	}
+	else {
+		[self.root insertNode:node];
+	}
+}
+
+@end
+
+
+@implementation TreeNode
+
+- (void) insertNode: (TreeNode *) node {
+	if (node.value < self.value) {
+		[self insertNodeOnLeftSide:node];
+	}
+	else {
+		[self insertNodeOnRightSide:node];
+	}
+}
+
+- (void) insertNodeOnLeftSide: (TreeNode *) node {
+	if (self.leftChild) {
+		[self.leftChild insertNode:node];
+	}
+	else {
+		self.leftChild = node;
+	}
+}
+
+- (void) insertNodeOnRightSide: (TreeNode *) node {
+	if (self.rightChild) {
+		[self.rightChild insertNode:node];
+	}
+	else {
+		self.rightChild = node;
+	}
+}
+
+@end
+
+@implementation LinkedList
+
+
+- (void) insertValue: (NSNumber *) value {
+	
+	if (!self.head) {
+		
+		LinkedListItem * head = [LinkedListItem new];
+		head.value = value;
+		self.head = head;
+	}
+	else {
+		
+		LinkedListItem * new = [LinkedListItem new];
+		new.value = value;
+		
+		[self.head insertItem: new];
+	}
+}
+
+
+- (void) swapNodes {
+	
+	LinkedListItem * head = self.head.nextItem;
+	
+	[self swapNodesForNode:self.head];
+	self.head = head;
+	
+}
+
+- (void) swapNodesForNode: (LinkedListItem *) node {
+	
+	
+	if (!node.nextItem) {
+		return;
+	}
+	
+	LinkedListItem * nextPair = node.nextItem.nextItem; // the begginning of the next pair
+	
+	node.nextItem.nextItem = node;
+	if (nextPair.nextItem)
+	{
+		node.nextItem = nextPair.nextItem;
+	}
+	else {
+		node.nextItem = nextPair;
+	}
+	
+	[self swapNodesForNode:nextPair];
+	
+}
+
+- (void) printList {
+	
+	[self.head printValue];
+	
+}
+
+
+@end
+
+
+@implementation LinkedListItem
+
+- (void) printValue {
+	
+	printf ("%s\n", [[NSString stringWithFormat:@"%@ --> ", self.value] UTF8String]);
+	[self.nextItem printValue];
+	
+}
+
+- (void) insertItem: (LinkedListItem *) item {
+	
+	if (self.nextItem) {
+		[self.nextItem insertItem:item];
+	}
+	else {
+		self.nextItem = item;
+	}
+	
 }
 
 

@@ -57,7 +57,7 @@
                                         <rect key="frame" x="371" y="22" width="35" height="30"/>
                                         <state key="normal" title="Scan"/>
                                         <connections>
-                                            <action selector="didPressScan:" destination="jzo-Lw-gDL" eventType="touchUpInside" id="ki5-xK-u6c"/>
+                                            <action selector="findPathToSubview" destination="jzo-Lw-gDL" eventType="touchUpInside" id="w1k-g1-7kO"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -184,11 +184,11 @@
                         <viewControllerLayoutGuide type="top" id="gRs-ku-wob"/>
                         <viewControllerLayoutGuide type="bottom" id="5j6-WI-4kd"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="5fz-en-Wjx">
+                    <view key="view" tag="7777" contentMode="scaleToFill" id="5fz-en-Wjx">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Tv-Mb-e21">
+                            <view tag="6666" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Tv-Mb-e21">
                                 <rect key="frame" x="20" y="28" width="374" height="618"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -202,15 +202,15 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.50196081400000003" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
-                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mph-to-bHh">
+                                    <view tag="5555" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mph-to-bHh">
                                         <rect key="frame" x="8" y="164" width="358" height="443"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D3B-oh-I01">
+                                            <view tag="4444" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D3B-oh-I01">
                                                 <rect key="frame" x="23" y="22" width="327" height="301"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KAz-5M-Nha">
+                                                    <view tag="3333" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KAz-5M-Nha">
                                                         <rect key="frame" x="15" y="20" width="240" height="128"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <subviews>
@@ -224,7 +224,7 @@
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                             </view>
-                                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bh0-Qn-N8l">
+                                                            <view tag="2222" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bh0-Qn-N8l">
                                                                 <rect key="frame" x="162" y="8" width="70" height="105"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <subviews>
@@ -233,7 +233,7 @@
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                         <color key="backgroundColor" red="0.0" green="0.2901960784" blue="0.55294117649999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     </view>
-                                                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A04-LB-2Uh">
+                                                                    <view tag="1111" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A04-LB-2Uh">
                                                                         <rect key="frame" x="8" y="16" width="54" height="25"/>
                                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                         <color key="backgroundColor" red="0.40000000000000002" green="0.058823529409999999" blue="0.69803921570000005" alpha="1" colorSpace="calibratedRGB"/>
@@ -268,6 +268,7 @@
                     </view>
                     <connections>
                         <outlet property="testView" destination="A04-LB-2Uh" id="Wi3-JJ-X8n"/>
+                        <outlet property="testView2" destination="OHe-mf-INg" id="xOO-x5-0DM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I5Q-q2-T1e" userLabel="First Responder" sceneMemberID="firstResponder"/>
