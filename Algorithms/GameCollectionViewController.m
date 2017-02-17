@@ -63,15 +63,20 @@ static NSString * const reuseIdentifier = @"Cell";
 
 	
 	
-	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:9];
+	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:5];
+	NSLog(@"What are the numbers: %@", numbers);
+	
+	NSLog(@"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	
 //	[AlgorithmManagerSwift pushZeroesWithArray:numbers];
 //	[AlgorithmManagerSwift removeDuplicatesWithArray: numbers];
 	
+	/*
 	BinaryTreeSwift * binaryTreeSwift = [BinaryTreeSwift new];
 	for (NSNumber * number in numbers) {
 		[binaryTreeSwift insertValueWithValue: number.integerValue];
 	}
+	 */
 	
 //	[AlgorithmManagerSwift binaryTreeToListWithTree:binaryTreeSwift];
 	
@@ -91,8 +96,9 @@ static NSString * const reuseIdentifier = @"Cell";
 	
 	*/
 	
-	
-//	LinkedList * newList = [AlgorithmManager makeLinkedListFromArray:numbers];
+
+	/*
+	LinkedList * newList = [AlgorithmManager makeLinkedListFromArray:numbers];
 	LinkedListSwift * newList = [LinkedListSwift new];
 	
 	for (NSNumber * number in numbers) {
@@ -107,6 +113,9 @@ static NSString * const reuseIdentifier = @"Cell";
 	newList.head = newHead;
 
 	[newList.head recursivePrint];
+	*/
+	
+	
 	
 //	[newList printList];
 	
@@ -133,22 +142,26 @@ static NSString * const reuseIdentifier = @"Cell";
 //	duration = [end timeIntervalSinceDate:start];
 //	NSLog(@"quicksort: completed in %f", duration);
 	
-	/*
-	 
+
+	 	/*
 	 NSInteger factorial = [AlgorithmManager factorial:12];
 	 NSLog(@"I found the factorial to be: %li", factorial);
 	 
 	 NSInteger recursiveFactorial = [AlgorithmManager recursiveFactorial:12];
 	 NSLog(@"I found the recursiveFactorial to be: %li", recursiveFactorial);
-	 
-	 //	BOOL isPalindrome = [AlgorithmManager isPalindrome:@"ababa"];
-	 if ([self isPalindrome:@"ababaababaababaababa"]) {
+		 
+		  */
+	
+	/*
+	BOOL isPalindrome = [AlgorithmManagerSwift isPalindromeWithString:@"fggf"];
+	 if (isPalindrome) {
 		NSLog(@"Found palindrome");
 	 }
 	 else {
 		NSLog(@"Not a palindrome");
 	 }
-	 */
+	*/
+	
 	
 	//	NSInteger result = [AlgorithmManager calculate:9 toThePowerOf:6];
 	//	NSLog(@"This is the result: %li", result);
@@ -165,14 +178,16 @@ static NSString * const reuseIdentifier = @"Cell";
 	 
 	 */ 
 	
+	/*
 	NSArray * data = @[ @3,@[@8, @8, @17, @[@6, @7], @9], @3, @9, @[@42, @1, @7, @[@34, @12, @9], @7, @17], @45];
 	self.enumerator = [[EnumeratorSwift alloc]initWithData:data];
-//	NSArray * allObjects = [self.enumerator allObjects];
+	NSArray * allObjects = [self.enumerator allObjects];
+	*/
 	
-
+	NSArray * sorted = [AlgorithmManagerSwift insertionSortWithArray:numbers];
+//	[AlgorithmManager insertionSort:[numbers mutableCopy]];
 	
-//	NSLog(@"returning all objects: %@", allObjects);
-	
+	NSLog(@"here it is sorted: %@", sorted);
 	
 }
 

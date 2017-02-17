@@ -9,6 +9,8 @@
 import UIKit
 
 class AlgorithmManagerSwift: NSObject {
+	
+	// MARK:- Shift zeroes
 
 	static func pushZeroesWith(array: [Int]) {
 		
@@ -60,6 +62,8 @@ class AlgorithmManagerSwift: NSObject {
 	 
 	}
 	
+	// MARK:- Remove duplicate
+	
 	static func removeDuplicatesWith(array: [Int]) {
 		
 		var copy = array
@@ -82,6 +86,8 @@ class AlgorithmManagerSwift: NSObject {
 		
 	}
 	
+	// MARK:- Binary tree to list
+	
 	static func binaryTreeToListWith(tree: BinaryTreeSwift) {
 		
 		let node = tree.root
@@ -95,19 +101,17 @@ class AlgorithmManagerSwift: NSObject {
 	static func doBreadthFirstSearch(node: BinaryTreeNodeSwift?,  array: [Int]) -> [Int]{
 		
 		var copy = array
-		print("Coming in with node \(node?.value)")
 		
 		if let theNode = node {
 			copy = self.doBreadthFirstSearch(node: theNode.leftChild, array: copy)
-			print("What's happening to my array 1? \(copy.count)")
 			copy.append(theNode.value)
-			print("What's happening to my array 2? \(copy.count)")
 			copy = self.doBreadthFirstSearch(node: theNode.rightChild, array: copy)
-			print("What's happening to my array 3? \(copy.count)")
 		}
 		
 		return copy
 	}
+	
+	// MARK:- Permutations
 	
 	static func setupPermutations() {
 		
@@ -145,6 +149,8 @@ class AlgorithmManagerSwift: NSObject {
 		return copy
 		
 	}
+	
+	// MARK:- Nearest common ancestor
 	
 	static func findCommonAncestor(i: UIView, m: UIView) -> UIView? {
 		
@@ -192,9 +198,11 @@ class AlgorithmManagerSwift: NSObject {
 		
 	}
 	
+	// MARK:- Swap nodes
+	
 	static func swapNodes(node: LinkedListItemSwift) {
 		
-		// we move in pairs, therefore we only care if there is a neighbor to the incoming node. If that's the case we stop the recursion
+		// we move in pairs, therefore we only care if there is a neighbor to the incoming node. If that's not the case we stop the recursion
 		
 		if let next = node.next {
 			
@@ -217,14 +225,97 @@ class AlgorithmManagerSwift: NSObject {
 				node.next = nextpairFirst
 			}
 			
+			// recurse
 			if nextpairFirst != nil {
 				self.swapNodes(node: nextpairFirst!)
 			}
 		}
 	}
 	
+	// MARK:- Palindrome
 	
+	static func isPalindrome(string: String) -> Bool {
+		
+		if string.characters.count <= 1 {
+			return true
+		}
+		
+		let first = string[string.startIndex];
+		let last = string[string.index(before: string.endIndex)]
+		
+		if first == last {
+			let range = string.index(after: string.startIndex)..<string.index(before: string.endIndex)
+			let substring = string[range]
+			return self.isPalindrome(string: substring)
+		}
+		else {
+			return false
+		}
+		
+	}
+	
+	// MARK:- Sorting
+	
+	static func locationSort( array: [Int])-> [Int] {
+	
+		var sorted = array
+		
+		for i in 0..<array.count {
+			let indexOfSmallest = self.indexOfSmallest(startingindex: i, array: sorted)
+			let smallest = sorted[indexOfSmallest]
+			sorted.remove(at: indexOfSmallest)
+			sorted.insert(smallest, at: i)
+		}
+		
+		return sorted
+	}
+	
+	private static func indexOfSmallest(startingindex: Int, array: [Int]) -> Int {
+		
+		var smallest = array[startingindex]
+		var
+		indexOfSmallest = startingindex
+		
+		for i in indexOfSmallest + 1..<array.count {
+			if array[i] < smallest {
+				smallest = array[i]
+				indexOfSmallest = i
+			}
+		}
+		
+		return indexOfSmallest
+	}
+	
+	static func insertionSort( array: [Int]) -> [Int] {
+		
+		var copy = array
+		
+		for i in 1..<copy.count {
+			let reference = copy[i]
+			var insertIndex = i
+
+			for j in (0...i-1).reversed(){
+				let incoming = copy[j]
+				
+				if incoming > reference {
+					insertIndex = j
+					copy[j+1] = copy[j]
+				}
+				else {
+					break
+				}
+			}
+			
+			copy[insertIndex] = reference
+		}
+		
+		return copy
+	}
 }
+
+
+
+// MARK:- Binary Tree Declaration
 
 class BinaryTreeSwift: NSObject {
 	
@@ -278,6 +369,8 @@ class BinaryTreeNodeSwift: NSObject {
 	
 }
 
+// MARK:- Linked list declaration
+
 class LinkedListSwift: NSObject {
 	
 	var head: LinkedListItemSwift?
@@ -318,6 +411,8 @@ class LinkedListItemSwift: NSObject {
 	
 }
 
+// MARK:- Enumerator declaration
+
 class EnumeratorSwift: NSObject {
 	
 	var data: [Any]
@@ -335,7 +430,7 @@ class EnumeratorSwift: NSObject {
 			return nil
 		}
 		else {
-			if let current = self.currentEnumerator { // nested enumerator present, attempt to step through it
+			if let current = self.currentEnumerator { // nested enumerator detected, attempt to step through it
 				let success = current.next()
 				
 				if success != nil {
@@ -352,7 +447,7 @@ class EnumeratorSwift: NSObject {
 		}
 	}
 	
-	func moveToNextIndex() -> NSNumber? {
+	private func moveToNextIndex() -> NSNumber? {
 		let current = self.currentIndex
 		self.currentIndex = self.currentIndex + 1
 		
@@ -363,6 +458,23 @@ class EnumeratorSwift: NSObject {
 		else {
 			return self.data[current] as? NSNumber
 		}
+	}
+	
+	func allObjects() -> [Any] {
+		
+		var retVal: [Any] = []
+		
+		for element in self.data {
+			if let array = element as? [Any] {
+				let enumerator = EnumeratorSwift(data: array)
+				let objects = enumerator.allObjects()
+				retVal += objects
+			}
+			else {
+				retVal += [element]
+			}
+		}
+		return retVal
 	}
 	
 }

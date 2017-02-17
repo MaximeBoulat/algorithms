@@ -150,14 +150,9 @@
 	NSNumber * smallest = array[index];
 	NSInteger indexOfSmallest = index;
 	
-	//	NSLog(@"What is the array count: %i", array.count);
-	
 	for (NSInteger i = index + 1; i < array.count; i++) {
-		//		NSLog(@"Iterating2 with index: %i", i);
 		NSNumber * value = array[i];
-		//		NSLog(@"Comparing birthdate: %@ with reference: %@", person.birthDate, smallestDate);
 		if (value < smallest) {
-			//			NSLog(@"Test passed!, returning index: %i", i);
 			smallest = value;
 			indexOfSmallest = i;
 		}
@@ -172,29 +167,33 @@
 	NSDate * start = [NSDate date];
 	
 	for (NSInteger i = 1; i < array.count; i++) {
-		NSNumber * value = array[i];
-		NSInteger insert = [self slideFromIndex:i-1 array:array value:value];
-		array[insert] = value;
+		NSNumber * reference = array[i];
+		
+		NSInteger insertIndex = i;
+		
+		for (NSInteger j = i-1; j >= 0; j--) {
+			NSNumber * incoming = array[j];
+			if (incoming > reference) {
+				insertIndex = j;
+				// shift
+				array[j+1] = array[j];
+			}
+			else {
+				break;
+			}
+		}
+		
+		array[insertIndex] = reference;
 	}
 	
 	NSDate * end = [NSDate date];
 	NSTimeInterval duration = [end timeIntervalSinceDate:start];
+	NSLog(@"Insertion completed with output: %@", array);
 	NSLog(@"insertionSort: completed in %f", duration);
 
 }
 
 
-+ (NSInteger) slideFromIndex: (NSInteger) index array: (NSMutableArray *) array value: (NSNumber *) value {
-	
-	NSInteger insertIndex = index;
-	
-	for (NSInteger i = index; i >= 0 && array[i] > value; i--) {
-		array[i+1] = array[i];
-		insertIndex = i;
-	}
-	
-	return insertIndex;
-}
 
 
 + (void) mergeSort: (NSMutableArray *) array start: (NSInteger) start end: (NSInteger) end {
