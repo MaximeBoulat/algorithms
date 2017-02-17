@@ -63,7 +63,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 	
 	
-	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:5];
+	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:44];
 	NSLog(@"What are the numbers: %@", numbers);
 	
 	NSLog(@"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
@@ -184,7 +184,7 @@ static NSString * const reuseIdentifier = @"Cell";
 	NSArray * allObjects = [self.enumerator allObjects];
 	*/
 	
-	NSArray * sorted = [AlgorithmManagerSwift insertionSortWithArray:numbers];
+	NSArray * sorted = [AlgorithmManagerSwift quickSortWithArray:numbers start:0 end:numbers.count - 1];
 //	[AlgorithmManager insertionSort:[numbers mutableCopy]];
 	
 	NSLog(@"here it is sorted: %@", sorted);

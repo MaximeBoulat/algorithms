@@ -222,7 +222,7 @@
 			[array replaceObjectsInRange:NSMakeRange(i, remaining.count) withObjectsFromArray:remaining];
 			break;
 		}
-		if (indexUpperHalf == highHalf.count) {
+		else if (indexUpperHalf == highHalf.count) {
 			NSRange rangeOfRemaining = NSMakeRange(indexLowHalf, lowHalf.count - indexLowHalf);
 			NSArray * remaining = [lowHalf subarrayWithRange:rangeOfRemaining];
 			[array replaceObjectsInRange:NSMakeRange(i, remaining.count) withObjectsFromArray:remaining];
@@ -273,9 +273,9 @@
 
 + (void) swap:(NSMutableArray *) array from: (NSInteger) from to: (NSInteger) to {
 	
-	id thing = array [from];
+	id foo = array [from];
 	array[from] = array[to];
-	array[to] = thing;
+	array[to] = foo;
 	
 }
 
@@ -312,11 +312,8 @@
 	NSString * firstLetter = [string substringToIndex:1];
 	NSString * lastLetter = [string substringFromIndex:string.length - 1];
 	
-	NSLog(@"Comparing first letter: %@ and last letter: %@", firstLetter, lastLetter);
-	
 	if ([firstLetter isEqualToString:lastLetter]) {
 		NSString * substring = [string substringWithRange:NSMakeRange(1, string.length -2)];
-		NSLog(@"Checking substring: %@", substring);
 		return [self isPalindrome: substring];
 	}
 	else {

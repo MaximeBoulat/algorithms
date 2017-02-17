@@ -311,7 +311,110 @@ class AlgorithmManagerSwift: NSObject {
 		
 		return copy
 	}
+	
+	static func mergeSort( array: [Int], start: Int, end: Int) -> [Int] {
+		
+		var copy = array
+		
+		if end > start {
+			
+			let q = (start + end) / 2
+			copy = self.mergeSort(array: copy, start: start, end: q)
+			copy = self.mergeSort(array: copy, start: q + 1, end: end)
+			copy = self.merge(array: copy, start: start, midPoint: q, end: end)
+		}
+		
+		return copy
+	}
+	
+	private static func merge( array: [Int], start: Int, midPoint: Int, end: Int) -> [Int] {
+		
+		var copy = array
+		var lowerHalf = Array(copy[start...midPoint])
+		var upperHalf = Array(copy[midPoint + 1...end])
+		var indexLowerHalf = 0
+		var indexUpperHalf = 0
+		
+		for i in start...end {
+			
+			if indexLowerHalf == lowerHalf.count {
+				let rangeOfRemaining = indexUpperHalf..<upperHalf.count
+				let remaining = Array(upperHalf[rangeOfRemaining])
+				copy.replaceSubrange(i...end, with: remaining)
+				break
+			}
+			else if (indexUpperHalf == upperHalf.count) {
+				let rangeOfRemaining = indexLowerHalf..<lowerHalf.count
+				let remaining = Array(lowerHalf[rangeOfRemaining])
+				copy.replaceSubrange(i...end, with: remaining)
+				break
+			}
+
+			let valueLowerHalf = lowerHalf[indexLowerHalf]
+			let valueUpperHalf = upperHalf[indexUpperHalf]
+			
+			if valueLowerHalf < valueUpperHalf {
+				copy[i] = valueLowerHalf
+				indexLowerHalf += 1
+			}
+			else {
+				copy[i] = valueUpperHalf
+				indexUpperHalf += 1
+			}
+		}
+		
+		return copy
+	}
+	
+	static func quickSort(array: [Int], start: Int, end: Int) -> [Int] {
+		
+		var copy = array
+		
+		if end > start {
+			let partition = self.partition(array: copy, start: start, end: end)
+			copy = partition.array
+			let newPivotIndex = partition.newIndex
+			copy = self.quickSort(array: copy, start: start, end: newPivotIndex-1)
+			copy = self.quickSort(array: copy, start: newPivotIndex + 1, end: end)
+		}
+		
+		return copy
+		
+	}
+	
+	private static func partition( array: [Int], start: Int, end: Int) -> (array: [Int], newIndex: Int) {
+		
+		var copy = array
+		var q = start
+		let reference = copy[end]
+
+		for i in start..<end {
+			if copy[i] < reference {
+			
+    		copy = self.swap(array: copy, from: i, to: q)
+				q += 1
+
+			}
+		}
+		
+		copy = self.swap(array: copy, from: q, to: end)
+		
+		return (copy, q)
+	}
+	
+	private static func swap (array: [Int], from: Int, to: Int) -> [Int] {
+		var copy = array
+		let foo = copy[from]
+		copy[from] = copy[to]
+		copy[to] = foo
+		
+		return copy
+	}
+	
+	
 }
+
+
 
 
 
