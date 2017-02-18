@@ -53,74 +53,6 @@
 
 #pragma mark - Sort
 
-// First method (using compare:)
-+ (void) compareSort: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingSelector:@selector(compare:)];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"compareSort: completed in %f", duration);
-}
-
-// Second method (using sort descriptors)
-+ (void) sortDescriptorsSort: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSSortDescriptor * descriptors = [[NSSortDescriptor alloc]initWithKey:@"birthDate" ascending:YES];
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingDescriptors:@[descriptors]];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"sortDescriptorsSort: completed in %f", duration);
-	
-	//	for (Person * person in sortedArray) {
-	//		NSLog(@"this is the date: %@", person.birthDate);
-	//	}
-}
-
-// Third method (implementing compare)
-+ (void) compareSort2: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingSelector:@selector(compare:)];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"compareSort2: completed in %f", duration);
-	
-	
-	//	for (Person * person in sortedArray) {
-	//		NSLog(@"this is the date: %@", person.birthDate);
-	//	}
-}
-
-// Fourth method (using a block)
-+ (void) blockCompare: (NSArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	NSArray * sortedArray __attribute__((unused)) = [array sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-		
-		Person * person1 = (Person *) obj1;
-		Person * person2 = (Person *) obj2;
-		
-		return [person1 compare: person2];
-	}];
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"blockCompare: completed in %f", duration);
-	
-	//	for (Person * person in sortedArray) {
-	//		NSLog(@"this is the date: %@", person.birthDate);
-	//	}
-}
-
 // Location sort
 + (void) locationSort: (NSMutableArray *) array {
 	
@@ -349,72 +281,6 @@
 
 #pragma mark - Helpers
 
-+ (NSMutableArray *) makeArrayOfPeopleWithCapacity: (NSInteger) capacity {
-	
-	NSArray * names = [AlgorithmManager makeArrayOfNamesWithCapacity:capacity];
-	NSArray * dates = [AlgorithmManager makeArrayOfDatesWithCapacity:capacity];
-	NSMutableArray * people = [NSMutableArray new];
-	
-	for (int i = 0; i<capacity ; i++) {
-		NSDate * date = dates[i];
-		NSString * name = names[i];
-		
-		Person * person = [[Person alloc]initWithDate:date andName:name];
-		[people addObject:person];
-	}
-	return people;
-}
-
-+ (NSArray *) makeArrayOfNamesWithCapacity: (NSInteger) capacity {
-	
-	NSArray * names = @[@"Kevin",
-						@"John",
-						@"Amy",
-						@"Britney",
-						@"Marc",
-						@"Joseph",
-						@"Mike",
-						@"Dan",
-						@"Dave",
-						@"Eric",
-						@"Ann",
-						@"Mary"];
-	
-	
-	
-	NSMutableArray * returnArray = [@[]mutableCopy];
-	
-	for (NSInteger i = 0; i < capacity; i++){
-		NSInteger random = arc4random_uniform(12);
-		[returnArray addObject:names [random]];
-	}
-	
-	return [returnArray copy];
-	
-}
-
-+ (NSArray *) makeArrayOfDatesWithCapacity: (NSInteger) capacity {
-	
-	NSMutableArray * dates = [NSMutableArray new];
-	
-	int yearUpperBound = 2017;
-	int yearLowerBound = 1900;
-	
-	for (NSInteger i = 0; i<capacity ; i++) {
-		NSDateComponents * components = [[NSDateComponents alloc]init];
-		components.day = arc4random_uniform(28);
-		components.month = arc4random_uniform(13);
-		components.year = yearLowerBound + arc4random() % (yearUpperBound - yearLowerBound);;
-		
-		NSDate * birthdate = [[NSCalendar currentCalendar] dateFromComponents:components];
-		[dates addObject:birthdate];
-		
-	}
-	
-	return [dates copy];
-	
-}
-
 
 + (NSArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity {
 	
@@ -485,12 +351,12 @@
 	
 	NSInteger i = 0;
 	while (i < array.count) {
-		Person * person = array[i];
-		if ([bag countForObject:person.firstName]) {
+		NSNumber * value = array[i];
+		if ([bag countForObject:value]) {
 			[array removeObjectAtIndex:i];
 		}
 		else {
-			[bag addObject:person.firstName];
+			[bag addObject:value];
 			i++;
 		}
 	}
@@ -642,56 +508,6 @@
 }
 
 
-
-
-@end
-
-@implementation Person
-
-- (instancetype)initWithDate: (NSDate *) date andName: (NSString *) name
-{
-	self = [super init];
-	if (self) {
-		self.birthDate = date;
-		self.firstName = name;
-	}
-	return self;
-}
-
-- (NSComparisonResult)compare:(id)other
-{
-	
-	if ([self.birthDate compare: ((Person *)other).birthDate] == NSOrderedDescending) {
-		return NSOrderedDescending;
-	}
-	else if ([self.birthDate compare: ((Person *)other).birthDate] == NSOrderedAscending) {
-		return NSOrderedAscending;
-	}
-	else {
-		return NSOrderedSame;
-	}
-}
-
-
-@end
-
-@implementation Item
-
-
-
-
-@end
-
-@implementation PermutationOperation
-
-- (instancetype)init
-{
-	self = [super init];
-	if (self) {
-		self.payload = @"";
-	}
-	return self;
-}
 
 
 @end

@@ -191,24 +191,6 @@ static NSString * const reuseIdentifier = @"Cell";
 	
 }
 
-- (void) viewDidAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	
-	/*
-	NSArray * tiles = self.collectionView.visibleCells;
-	
-	UIView * tile1 = tiles[arc4random_uniform(tiles.count)];
-	UIView * tile2 = tiles[arc4random_uniform(tiles.count)];
-	
-	UIView * superview = [AlgorithmManager findCommonSuperview:tile1 and:tile2];
-//	UIView * common = [AlgorithmManagerSwift findCommonAncestorWithI:tile1 m:tile2];
-	
-	NSLog(@"Found the common superview? %@", superview);
-	 */
-	 
-}
-
-
 
 #pragma mark CollectionView methods
 
@@ -263,9 +245,6 @@ static NSString * const reuseIdentifier = @"Cell";
 		cell.theLabel.text = [NSString stringWithFormat:@"%li", gametile.score];
 	}
 
-	
-	
-	
 	return cell;
 }
 
@@ -275,20 +254,6 @@ static NSString * const reuseIdentifier = @"Cell";
 	NSLog(@"This is the return value: %@", [self.enumerator next]);
 	
 }
-
-/*
- // Uncomment this method to specify if the specified item should be highlighted during tracking
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
- }
- */
-
-/*
- // Uncomment this method to specify if the specified item should be selected
- - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
- return YES;
- }
- */
 
 
 - (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -351,12 +316,10 @@ static NSString * const reuseIdentifier = @"Cell";
 						continue;
 					}
 					
-					NSLog(@"Going north checking row: %li, column: %li", previous.row - 2, previous.column);
 					// check if two spaces north is available
 					
 					if (previous.row - 2 <= 0) {
 						northChecked = YES;
-						NSLog(@"North: Bailing because out of bounds");
 					}
 					else {
 						
@@ -366,11 +329,9 @@ static NSString * const reuseIdentifier = @"Cell";
 						GameTile * tile = self.datasource[newRow][previous.column];
 
 						if (tile.visited == YES) {
-							NSLog(@"North: Bailing because already visited");
 							northChecked = YES;
 						}
 						else {
-							NSLog(@"North: Updating");
 							northChecked = NO;
 							southChecked = NO;
 							westChecked = NO;
@@ -388,8 +349,6 @@ static NSString * const reuseIdentifier = @"Cell";
 							[tile.neighbors addObject: wall];
 							[wall.neighbors addObject:tile];
 							
-							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
-							
 							[undoStack insertObject: tile atIndex:0];
 							previous.type = none;
 							previous = tile;
@@ -405,21 +364,16 @@ static NSString * const reuseIdentifier = @"Cell";
 						continue;
 					}
 					
-					NSLog(@"Going east checking row: %li, column: %li", previous.row, previous.column + 2);
-					
 					if (previous.column + 2 >= self.numberOfItemsAcross) {
-						NSLog(@"East: Bailing because out of bounds");
 						eastChecked = YES;
 					}
 					else {
 						NSInteger newColumn = previous.column + 2;
 						GameTile * tile = self.datasource[previous.row][newColumn];
 						if (tile.visited) {
-							NSLog(@"East: Bailing because already visited");
 							eastChecked = YES;
 						}
 						else {
-							NSLog(@"East: Updating");
 							northChecked = NO;
 							southChecked = NO;
 							westChecked = NO;
@@ -436,7 +390,6 @@ static NSString * const reuseIdentifier = @"Cell";
 							[previous.neighbors addObject:wall];
 							[tile.neighbors addObject: wall];
 							[wall.neighbors addObject:tile];
-							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
 							
 							[undoStack insertObject: tile atIndex:0];
 							previous.type = none;
@@ -451,13 +404,9 @@ static NSString * const reuseIdentifier = @"Cell";
 					if (southChecked) {
 						continue;
 					}
-					
-					NSLog(@"Going south checking row: %li, column: %li", previous.row + 2, previous.column);
-					
 					// check if two spaces north is available
 					
 					if (previous.row + 2 >= self.datasource.count) {
-						NSLog(@"South: Bailing because out of bounds");
 						southChecked = YES;
 					}
 					else {
@@ -466,11 +415,9 @@ static NSString * const reuseIdentifier = @"Cell";
 						// get the corresponding tile
 						GameTile * tile = self.datasource[newRow][previous.column];
 						if (tile.visited == YES) {
-							NSLog(@"South: Bailing because already visited");
 							southChecked = YES;
 						}
 						else {
-							NSLog(@"South: Updating");
 							northChecked = NO;
 							southChecked = NO;
 							westChecked = NO;
@@ -487,7 +434,6 @@ static NSString * const reuseIdentifier = @"Cell";
 							[previous.neighbors addObject:wall];
 							[tile.neighbors addObject: wall];
 							[wall.neighbors addObject:tile];
-							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
 							[undoStack insertObject: tile atIndex:0];
 							previous.type = none;
 							previous = tile;
@@ -503,21 +449,16 @@ static NSString * const reuseIdentifier = @"Cell";
 						continue;
 					}
 					
-					NSLog(@"Going west checking row: %li, column: %li", previous.row, previous.column - 2);
-					
 					if (previous.column - 2 <= 0) {
-						NSLog(@"West: Bailing because out of bounds");
 						westChecked = YES;
 					}
 					else {
 						NSInteger newColumn = previous.column - 2;
 						GameTile * tile = self.datasource[previous.row][newColumn];
 						if (tile.visited) {
-							NSLog(@"West: Bailing because already visited");
 							westChecked = YES;
 						}
 						else {
-							NSLog(@"West: Updating");
 							northChecked = NO;
 							southChecked = NO;
 							westChecked = NO;
@@ -535,8 +476,6 @@ static NSString * const reuseIdentifier = @"Cell";
 							[tile.neighbors addObject: wall];
 							[wall.neighbors addObject:tile];
 							
-							NSLog(@"Did I add some neighbors here? %@ count: %li", tile.neighbors, tile.neighbors.count);
-							
 							[undoStack insertObject: tile atIndex:0];
 							previous.type = none;
 							previous = tile;
@@ -547,11 +486,7 @@ static NSString * const reuseIdentifier = @"Cell";
 					break;
 			}
 			
-			NSLog(@"Tiles visited = %li totalTiles = %li", (long) tilesVisited, (long) totalTiles);
-			
 			if (northChecked && southChecked && eastChecked && westChecked) {
-				
-				NSLog(@"Dead end, backing out with %li", (long) undoStack.count);
 
 				[undoStack removeObjectAtIndex:0];
 				previous.type = none;
@@ -566,8 +501,6 @@ static NSString * const reuseIdentifier = @"Cell";
 			dispatch_sync(dispatch_get_main_queue(), ^{
 				[self.collectionView reloadData];
 			});
-			
-			//			[NSThread sleepForTimeInterval:0.5];
 			
 			if (tilesVisited >= totalTiles) {
 				previous.type = none;
@@ -623,131 +556,6 @@ static NSString * const reuseIdentifier = @"Cell";
 	
 }
 
-- (void) breadthFirstMaze {
-	
-	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		
-		NSMutableArray * queue = [@[]mutableCopy];
-		[queue addObject:self.datasource [1][1]];
-		
-		while (queue.count) {
-			
-			NSLog(@"Coming in the queue with queue count: %lu", (unsigned long)queue.count);
-			//
-			//			for (NSInteger i = 0; i < queue.count; i++) {
-			GameTile * currentTile = queue[0];
-			
-			// Get the adjacent tiles
-			
-			
-			// north
-			NSInteger row = currentTile.row + 2;
-			
-			NSLog(@"Checking row: %li and column: %li", row, currentTile.column);
-			
-			if (![self isOutOfBoundsForRow:row column:currentTile.column]) {
-				NSLog(@"Not out of bounds");
-				
-				GameTile * incoming = self.datasource[row][currentTile.column];
-				
-				
-				if (!incoming.ancestor) {
-					NSLog(@"Not visited");
-					[queue addObject:incoming];
-					GameTile * divider = self.datasource[currentTile.row + 1][currentTile.column];
-					divider.isWall = NO;
-					incoming.ancestor = currentTile;
-				}
-				else {
-					NSLog(@"Visited");
-				}
-			}
-			else {
-				NSLog(@"Out of bounds");
-			}
-			
-			// east
-			NSInteger column = currentTile.column + 2;
-			
-			NSLog(@"Checking row: %li and column: %li", currentTile.row, column);
-			if (![self isOutOfBoundsForRow:currentTile.row column:column]) {
-				NSLog(@"Not out of bounds");
-				GameTile * incoming = self.datasource[currentTile.row][column];
-				
-				if (!incoming.ancestor) {
-					NSLog(@"Not visited");
-					[queue addObject:incoming];
-					GameTile * divider = self.datasource[currentTile.row][currentTile.column + 1];
-					divider.isWall = NO;
-					incoming.ancestor = currentTile;
-				}
-				else {
-					NSLog(@"Visited");
-				}
-			}
-			else {
-				NSLog(@"Out of bounds");
-			}
-			
-			// south
-			row = currentTile.row + 2;
-			NSLog(@"Checking row: %li and column: %li", row, currentTile.column);
-			if (![self isOutOfBoundsForRow:row column:currentTile.column]) {
-				NSLog(@"Not out of bounds");
-				GameTile * incoming = self.datasource[row][currentTile.column];
-				
-				if (!incoming.ancestor) {
-					NSLog(@"Not visited");
-					[queue addObject:incoming];
-					GameTile * divider = self.datasource[currentTile.row - 1][currentTile.column];
-					divider.isWall = NO;
-					incoming.ancestor = currentTile;
-				}
-				else {
-					NSLog(@"Visited");
-				}
-			}
-			else {
-				NSLog(@"Out of bounds");
-			}
-			
-			// west
-			column = currentTile.column - 2;
-			NSLog(@"Checking row: %li and column: %li", currentTile.row, column);
-			if (![self isOutOfBoundsForRow:currentTile.row column:column]) {
-				NSLog(@"Not out of bounds");
-				GameTile * incoming = self.datasource[currentTile.row][column];
-				
-				if (!incoming.ancestor) {
-					NSLog(@"Not visited");
-					[queue addObject:incoming];
-					GameTile * divider = self.datasource[currentTile.row][currentTile.column - 1];
-					divider.isWall = NO;
-					incoming.ancestor = currentTile;
-				}
-				else {
-					NSLog(@"Visited");
-				}
-			}
-			else {
-				NSLog(@"Out of bounds");
-			}
-			
-			[queue removeObjectAtIndex:0];
-			
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				[self.collectionView reloadData];
-			});
-			
-		}
-		
-		
-		NSLog(@"EXITING the queue!!!!!");
-		
-	});
-	
-}
-
 
 - (BOOL) isOutOfBoundsForRow: (NSInteger) row column: (NSInteger) column {
 	
@@ -757,8 +565,10 @@ static NSString * const reuseIdentifier = @"Cell";
 		row >= self.datasource.count) {
 		return YES;
 	}
+	else {
+		return NO;
+	}
 	
-	return NO;
 }
 
 

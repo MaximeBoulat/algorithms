@@ -32,8 +32,6 @@ typedef NS_ENUM(NSInteger, TileType) {
 @property (nonatomic, assign) NSInteger row;
 @property (nonatomic, assign) NSInteger column;
 
-@property (nonatomic, assign) GameTile * ancestor;
-
 @property (nonatomic, retain) NSMutableArray * neighbors;
 
 

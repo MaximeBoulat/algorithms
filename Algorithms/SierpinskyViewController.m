@@ -58,20 +58,7 @@
 		[self addSubviewsToView:subview];
 	}
 }
- 
 
-- (void) solveHanoiTowerProblemWithNumberOfDisks: (NSInteger) disks {
-	
-	if (disks == 1) {
-		NSLog(@"Solved!");
-	}
-	else {
-		
-		
-	}
-	
-	
-}
 
 
 @end
