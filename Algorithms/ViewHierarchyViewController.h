@@ -8,9 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol SubviewSelectionProtocol <NSObject>
+
+-(void) didMakeSelectionWithStack: (NSArray *) stack;
+
+@end
+
 @interface ViewHierarchyViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIView *testView;
-@property (weak, nonatomic) IBOutlet UIView *testView2;
+@property (nonatomic, strong) NSMutableArray * selectionStack;
+@property (nonatomic, assign) id <SubviewSelectionProtocol> delegate;
+@property (nonatomic, strong) UIView * commonSuperview;
+
+@end
+
+@interface BorderedView : UIView
 
 @end

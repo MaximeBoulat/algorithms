@@ -18,6 +18,7 @@
 		6A9769E81E4581B000C0800C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A9769E71E4581B000C0800C /* Assets.xcassets */; };
 		6A9769EB1E4581B000C0800C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A9769E91E4581B000C0800C /* LaunchScreen.storyboard */; };
 		6A9769F41E4583A000C0800C /* GameCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9769F31E4583A000C0800C /* GameCollectionViewController.m */; };
+		6AA24C831E592BD1001B2CC9 /* ViewHierarchyContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AA24C821E592BD1001B2CC9 /* ViewHierarchyContainerViewController.m */; };
 		6AFF822D1E4E44B500B30813 /* AlgorithmManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,8 @@
 		6A9769EC1E4581B000C0800C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A9769F21E4583A000C0800C /* GameCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameCollectionViewController.h; sourceTree = "<group>"; };
 		6A9769F31E4583A000C0800C /* GameCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameCollectionViewController.m; sourceTree = "<group>"; };
+		6AA24C811E592BD1001B2CC9 /* ViewHierarchyContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewHierarchyContainerViewController.h; sourceTree = "<group>"; };
+		6AA24C821E592BD1001B2CC9 /* ViewHierarchyContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewHierarchyContainerViewController.m; sourceTree = "<group>"; };
 		6AFF822B1E4E44B500B30813 /* AlgorithmManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlgorithmManager.h; sourceTree = "<group>"; };
 		6AFF822C1E4E44B500B30813 /* AlgorithmManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlgorithmManager.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -66,6 +69,8 @@
 				6A9769F31E4583A000C0800C /* GameCollectionViewController.m */,
 				6A49D7D81E5275A20069DBDE /* ViewHierarchyViewController.h */,
 				6A49D7D91E5275A20069DBDE /* ViewHierarchyViewController.m */,
+				6AA24C811E592BD1001B2CC9 /* ViewHierarchyContainerViewController.h */,
+				6AA24C821E592BD1001B2CC9 /* ViewHierarchyContainerViewController.m */,
 				6A3FD4021E4AAFA0008AEBC1 /* SierpinskyViewController.h */,
 				6A3FD4031E4AAFA0008AEBC1 /* SierpinskyViewController.m */,
 			);
@@ -195,6 +200,7 @@
 				6A49D7DA1E5275A20069DBDE /* ViewHierarchyViewController.m in Sources */,
 				6A3FD4071E4AB00A008AEBC1 /* ContainerViewController.m in Sources */,
 				6A9769F41E4583A000C0800C /* GameCollectionViewController.m in Sources */,
+				6AA24C831E592BD1001B2CC9 /* ViewHierarchyContainerViewController.m in Sources */,
 				6A857D9E1E52F2B500C489D8 /* AlgorithmManagerSwift.swift in Sources */,
 				6AFF822D1E4E44B500B30813 /* AlgorithmManager.m in Sources */,
 				6A9769DD1E4581B000C0800C /* main.m in Sources */,

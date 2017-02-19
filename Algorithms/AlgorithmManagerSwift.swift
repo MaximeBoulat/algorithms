@@ -62,7 +62,7 @@ class AlgorithmManagerSwift: NSObject {
 	 
 	}
 	
-	// MARK:- Remove duplicate
+	// MARK:- Remove duplicates
 	
 	static func removeDuplicatesWith(array: [Int]) {
 		
@@ -83,6 +83,185 @@ class AlgorithmManagerSwift: NSObject {
 		}
 		
 		print("Did I remove the duplicates? \(copy)")
+		
+	}
+	
+	// MARK:- Sorting
+	
+	static func locationSort( array: [Int])-> [Int] {
+		
+		var sorted = array
+		
+		for i in 0..<array.count {
+			let indexOfSmallest = self.indexOfSmallest(startingindex: i, array: sorted)
+			let smallest = sorted[indexOfSmallest]
+			sorted.remove(at: indexOfSmallest)
+			sorted.insert(smallest, at: i)
+		}
+		
+		return sorted
+	}
+	
+	private static func indexOfSmallest(startingindex: Int, array: [Int]) -> Int {
+		
+		var smallest = array[startingindex]
+		var
+		indexOfSmallest = startingindex
+		
+		for i in indexOfSmallest + 1..<array.count {
+			if array[i] < smallest {
+				smallest = array[i]
+				indexOfSmallest = i
+			}
+		}
+		
+		return indexOfSmallest
+	}
+	
+	static func insertionSort( array: [Int]) -> [Int] {
+		
+		var copy = array
+		
+		for i in 1..<copy.count {
+			let reference = copy[i]
+			var insertIndex = i
+			
+			for j in (0...i-1).reversed(){
+				let incoming = copy[j]
+				
+				if incoming > reference {
+					insertIndex = j
+					copy[j+1] = copy[j]
+				}
+				else {
+					break
+				}
+			}
+			
+			copy[insertIndex] = reference
+		}
+		
+		return copy
+	}
+	
+	static func mergeSort( array: [Int], start: Int, end: Int) -> [Int] {
+		
+		var copy = array
+		
+		if end > start {
+			
+			let q = (start + end) / 2
+			copy = self.mergeSort(array: copy, start: start, end: q)
+			copy = self.mergeSort(array: copy, start: q + 1, end: end)
+			copy = self.merge(array: copy, start: start, midPoint: q, end: end)
+		}
+		
+		return copy
+	}
+	
+	private static func merge( array: [Int], start: Int, midPoint: Int, end: Int) -> [Int] {
+		
+		var copy = array
+		var lowerHalf = Array(copy[start...midPoint])
+		var upperHalf = Array(copy[midPoint + 1...end])
+		var indexLowerHalf = 0
+		var indexUpperHalf = 0
+		
+		for i in start...end {
+			
+			if indexLowerHalf == lowerHalf.count {
+				let rangeOfRemaining = indexUpperHalf..<upperHalf.count
+				let remaining = Array(upperHalf[rangeOfRemaining])
+				copy.replaceSubrange(i...end, with: remaining)
+				break
+			}
+			else if (indexUpperHalf == upperHalf.count) {
+				let rangeOfRemaining = indexLowerHalf..<lowerHalf.count
+				let remaining = Array(lowerHalf[rangeOfRemaining])
+				copy.replaceSubrange(i...end, with: remaining)
+				break
+			}
+			
+			let valueLowerHalf = lowerHalf[indexLowerHalf]
+			let valueUpperHalf = upperHalf[indexUpperHalf]
+			
+			if valueLowerHalf < valueUpperHalf {
+				copy[i] = valueLowerHalf
+				indexLowerHalf += 1
+			}
+			else {
+				copy[i] = valueUpperHalf
+				indexUpperHalf += 1
+			}
+		}
+		
+		return copy
+	}
+	
+	static func quickSort(array: [Int], start: Int, end: Int) -> [Int] {
+		
+		var copy = array
+		
+		if end > start {
+			let partition = self.partition(array: copy, start: start, end: end)
+			copy = partition.array
+			let newPivotIndex = partition.newIndex
+			copy = self.quickSort(array: copy, start: start, end: newPivotIndex-1)
+			copy = self.quickSort(array: copy, start: newPivotIndex + 1, end: end)
+		}
+		
+		return copy
+		
+	}
+	
+	private static func partition( array: [Int], start: Int, end: Int) -> (array: [Int], newIndex: Int) {
+		
+		var copy = array
+		var q = start
+		let reference = copy[end]
+		
+		for i in start..<end {
+			if copy[i] < reference {
+				
+				copy = self.swap(array: copy, from: i, to: q)
+				q += 1
+				
+			}
+		}
+		
+		copy = self.swap(array: copy, from: q, to: end)
+		
+		return (copy, q)
+	}
+	
+	private static func swap (array: [Int], from: Int, to: Int) -> [Int] {
+		var copy = array
+		let foo = copy[from]
+		copy[from] = copy[to]
+		copy[to] = foo
+		
+		return copy
+	}
+	
+	// MARK:- Palindrome
+	
+	static func isPalindrome(string: String) -> Bool {
+		
+		if string.characters.count <= 1 {
+			return true
+		}
+		
+		let first = string[string.startIndex];
+		let last = string[string.index(before: string.endIndex)]
+		
+		if first == last {
+			let range = string.index(after: string.startIndex)..<string.index(before: string.endIndex)
+			let substring = string[range]
+			return self.isPalindrome(string: substring)
+		}
+		else {
+			return false
+		}
 		
 	}
 	
@@ -231,186 +410,6 @@ class AlgorithmManagerSwift: NSObject {
 			}
 		}
 	}
-	
-	// MARK:- Palindrome
-	
-	static func isPalindrome(string: String) -> Bool {
-		
-		if string.characters.count <= 1 {
-			return true
-		}
-		
-		let first = string[string.startIndex];
-		let last = string[string.index(before: string.endIndex)]
-		
-		if first == last {
-			let range = string.index(after: string.startIndex)..<string.index(before: string.endIndex)
-			let substring = string[range]
-			return self.isPalindrome(string: substring)
-		}
-		else {
-			return false
-		}
-		
-	}
-	
-	// MARK:- Sorting
-	
-	static func locationSort( array: [Int])-> [Int] {
-	
-		var sorted = array
-		
-		for i in 0..<array.count {
-			let indexOfSmallest = self.indexOfSmallest(startingindex: i, array: sorted)
-			let smallest = sorted[indexOfSmallest]
-			sorted.remove(at: indexOfSmallest)
-			sorted.insert(smallest, at: i)
-		}
-		
-		return sorted
-	}
-	
-	private static func indexOfSmallest(startingindex: Int, array: [Int]) -> Int {
-		
-		var smallest = array[startingindex]
-		var
-		indexOfSmallest = startingindex
-		
-		for i in indexOfSmallest + 1..<array.count {
-			if array[i] < smallest {
-				smallest = array[i]
-				indexOfSmallest = i
-			}
-		}
-		
-		return indexOfSmallest
-	}
-	
-	static func insertionSort( array: [Int]) -> [Int] {
-		
-		var copy = array
-		
-		for i in 1..<copy.count {
-			let reference = copy[i]
-			var insertIndex = i
-
-			for j in (0...i-1).reversed(){
-				let incoming = copy[j]
-				
-				if incoming > reference {
-					insertIndex = j
-					copy[j+1] = copy[j]
-				}
-				else {
-					break
-				}
-			}
-			
-			copy[insertIndex] = reference
-		}
-		
-		return copy
-	}
-	
-	static func mergeSort( array: [Int], start: Int, end: Int) -> [Int] {
-		
-		var copy = array
-		
-		if end > start {
-			
-			let q = (start + end) / 2
-			copy = self.mergeSort(array: copy, start: start, end: q)
-			copy = self.mergeSort(array: copy, start: q + 1, end: end)
-			copy = self.merge(array: copy, start: start, midPoint: q, end: end)
-		}
-		
-		return copy
-	}
-	
-	private static func merge( array: [Int], start: Int, midPoint: Int, end: Int) -> [Int] {
-		
-		var copy = array
-		var lowerHalf = Array(copy[start...midPoint])
-		var upperHalf = Array(copy[midPoint + 1...end])
-		var indexLowerHalf = 0
-		var indexUpperHalf = 0
-		
-		for i in start...end {
-			
-			if indexLowerHalf == lowerHalf.count {
-				let rangeOfRemaining = indexUpperHalf..<upperHalf.count
-				let remaining = Array(upperHalf[rangeOfRemaining])
-				copy.replaceSubrange(i...end, with: remaining)
-				break
-			}
-			else if (indexUpperHalf == upperHalf.count) {
-				let rangeOfRemaining = indexLowerHalf..<lowerHalf.count
-				let remaining = Array(lowerHalf[rangeOfRemaining])
-				copy.replaceSubrange(i...end, with: remaining)
-				break
-			}
-
-			let valueLowerHalf = lowerHalf[indexLowerHalf]
-			let valueUpperHalf = upperHalf[indexUpperHalf]
-			
-			if valueLowerHalf < valueUpperHalf {
-				copy[i] = valueLowerHalf
-				indexLowerHalf += 1
-			}
-			else {
-				copy[i] = valueUpperHalf
-				indexUpperHalf += 1
-			}
-		}
-		
-		return copy
-	}
-	
-	static func quickSort(array: [Int], start: Int, end: Int) -> [Int] {
-		
-		var copy = array
-		
-		if end > start {
-			let partition = self.partition(array: copy, start: start, end: end)
-			copy = partition.array
-			let newPivotIndex = partition.newIndex
-			copy = self.quickSort(array: copy, start: start, end: newPivotIndex-1)
-			copy = self.quickSort(array: copy, start: newPivotIndex + 1, end: end)
-		}
-		
-		return copy
-		
-	}
-	
-	private static func partition( array: [Int], start: Int, end: Int) -> (array: [Int], newIndex: Int) {
-		
-		var copy = array
-		var q = start
-		let reference = copy[end]
-
-		for i in start..<end {
-			if copy[i] < reference {
-			
-    		copy = self.swap(array: copy, from: i, to: q)
-				q += 1
-
-			}
-		}
-		
-		copy = self.swap(array: copy, from: q, to: end)
-		
-		return (copy, q)
-	}
-	
-	private static func swap (array: [Int], from: Int, to: Int) -> [Int] {
-		var copy = array
-		let foo = copy[from]
-		copy[from] = copy[to]
-		copy[to] = foo
-		
-		return copy
-	}
-	
 	
 }
 

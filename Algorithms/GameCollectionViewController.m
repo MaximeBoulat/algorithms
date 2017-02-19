@@ -48,10 +48,10 @@ static NSString * const reuseIdentifier = @"Cell";
 	self.numberOfItemsAcross = 25;
 	
 	self.datasource = [NSMutableArray new];
-	[self makeDataSource];
-	
+//	[self makeDataSource];
 //	[self makeMaze];
-//	[self breadthFirstMaze];
+	
+	
 	
 	
 	//	[AlgorithmManager doBinarySearch];
@@ -192,7 +192,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 
-#pragma mark CollectionView methods
+#pragma mark - CollectionView methods
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
 	return 1;

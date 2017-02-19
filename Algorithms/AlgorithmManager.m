@@ -14,7 +14,6 @@
 
 #pragma mark - Binary Search
 
-
 + (void) doBinarySearch {
 	
 	NSInteger random = arc4random_uniform(100000);
@@ -25,8 +24,6 @@
 		[array addObject:@(i)];
 	}
 	
-	NSLog(@"What is the random: %li and the array count: %li", random, array.count);
-	
 	NSInteger target = arc4random_uniform((int)array.count);
 	
 	NSInteger min = 0;
@@ -35,8 +32,6 @@
 	while (1) {
 		NSInteger middle = (max + min) / 2;
 		NSInteger guess = ((NSNumber *)array[middle]).intValue;
-		
-		NSLog(@"guess: %li, target: %li, min: %li, max: %li", guess, target, min, max);
 		
 		if (guess == target) {
 			NSLog(@"Found it! Breaking");
@@ -47,6 +42,75 @@
 		}
 		else {
 			min = guess + 1;
+		}
+	}
+}
+
+#pragma mark - Shift zeroes
+
++ (void) pushZeroes: (NSMutableArray *) array {
+	
+	NSInteger length = 0;
+	
+	for (NSInteger i = array.count - 1 ; i >= 0; i--) {
+		
+		NSNumber * value = array[i];
+		
+		if (value.intValue == 0) {
+			length += 1;
+		}
+		else if (length != 0) {
+			NSRange range = NSMakeRange(i + 1, length);
+			NSArray * zeroes = [array subarrayWithRange:range];
+			[array removeObjectsInRange:range];
+			[array addObjectsFromArray:zeroes];
+			length = 0;
+		}
+	}
+	
+	NSLog(@"Array after adjustment: %@", array);
+}
+
++ (void) pullZeroes: (NSMutableArray *) array {
+	
+	NSInteger length = 0;
+	
+	for (NSInteger i = 0; i < array.count; i++) {
+		
+		NSNumber * value = array[i];
+		if (value.intValue == 0) {
+			length += 1;
+		}
+		else if (length != 0) {
+			NSRange range = NSMakeRange(i - length, length);
+			NSArray * zeroes = [array subarrayWithRange:range];
+			NSLog(@"Found some zeroes: %@", zeroes);
+			[array removeObjectsInRange:range];
+			
+			[array insertObjects:zeroes atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, length)]];
+			length = 0;
+			
+		}
+	}
+	NSLog(@"Array after adjustment: %@", array);
+	
+}
+
+#pragma mark - Remove duplicates
+
++ (void) removeDuplicates: (NSMutableArray *) array {
+	
+	NSCountedSet * bag = [NSCountedSet new];
+	
+	NSInteger i = 0;
+	while (i < array.count) {
+		NSNumber * value = array[i];
+		if ([bag countForObject:value]) {
+			[array removeObjectAtIndex:i];
+		}
+		else {
+			[bag addObject:value];
+			i++;
 		}
 	}
 }
@@ -211,7 +275,6 @@
 	
 }
 
-
 #pragma mark - Recursion
 
 + (NSInteger) factorial: (NSInteger) value {
@@ -278,89 +341,7 @@
 	return (value % 2 == 0);
 }
 
-
-#pragma mark - Helpers
-
-
-+ (NSArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity {
-	
-	NSMutableArray * array = [NSMutableArray new];
-	
-	for (NSInteger i = 0; i < capacity; i++) {
-		
-		NSInteger random = arc4random_uniform(100);
-		[array addObject:@(random)];
-	}
-	
-	return array;
-}
-
-#pragma mark - Interview questions
-
-+ (void) pushZeroes: (NSMutableArray *) array {
-	
-	NSInteger length = 0;
-	
-	for (NSInteger i = array.count - 1 ; i >= 0; i--) {
-
-		NSNumber * value = array[i];
-		
-		if (value.intValue == 0) {
-			length += 1;
-		}
-		else if (length != 0) {
-			NSRange range = NSMakeRange(i + 1, length);
-			NSArray * zeroes = [array subarrayWithRange:range];
-			[array removeObjectsInRange:range];
-			[array addObjectsFromArray:zeroes];
-			length = 0;
-		}
-	}
-	
-	NSLog(@"Array after adjustment: %@", array);
-}
-
-+ (void) pullZeroes: (NSMutableArray *) array {
-	
-	NSInteger length = 0;
-	
-	for (NSInteger i = 0; i < array.count; i++) {
-		
-		NSNumber * value = array[i];
-		if (value.intValue == 0) {
-			length += 1;
-		}
-		else if (length != 0) {
-			NSRange range = NSMakeRange(i - length, length);
-			NSArray * zeroes = [array subarrayWithRange:range];
-			NSLog(@"Found some zeroes: %@", zeroes);
-			[array removeObjectsInRange:range];
-			
-			[array insertObjects:zeroes atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, length)]];
-			length = 0;
-			
-		}
-	}
-	NSLog(@"Array after adjustment: %@", array);
-	
-}
-
-+ (void) removeDuplicates: (NSMutableArray *) array {
-	
-	NSCountedSet * bag = [NSCountedSet new];
-	
-	NSInteger i = 0;
-	while (i < array.count) {
-		NSNumber * value = array[i];
-		if ([bag countForObject:value]) {
-			[array removeObjectAtIndex:i];
-		}
-		else {
-			[bag addObject:value];
-			i++;
-		}
-	}
-}
+#pragma mark - Binary tree to list
 
 + (void) binaryTreeToList: (BinaryTree *) tree {
 	
@@ -418,6 +399,8 @@
 	return list;
 }
 
+#pragma mark - Permutations
+
 + (void) setupPermutations {
 	
 	NSDictionary * map = @{@2 : @[@"A", @"B", @"C"],
@@ -454,7 +437,7 @@
 	}
 }
 
-+ (UIView *) findCommonSuperview: (UIView *) first and: (UIView*) second {
++ (UIView *) findNearestCommonAncestor: (UIView *) first and: (UIView*) second {
 
 	// Build a stack
 	
@@ -508,6 +491,20 @@
 }
 
 
+#pragma mark - Helpers
+
++ (NSArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity {
+	
+	NSMutableArray * array = [NSMutableArray new];
+	
+	for (NSInteger i = 0; i < capacity; i++) {
+		
+		NSInteger random = arc4random_uniform(100);
+		[array addObject:@(random)];
+	}
+	
+	return array;
+}
 
 
 @end

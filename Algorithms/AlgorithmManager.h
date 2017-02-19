@@ -70,7 +70,7 @@
 + (LinkedList *) makeLinkedListFromArray: (NSArray *) array;
 
 + (void) setupPermutations;
-+ (UIView *) findCommonSuperview: (UIView *) first and: (UIView*) second;
++ (UIView *) findNearestCommonAncestor: (UIView *) first and: (UIView*) second;
 + (void) divide: (NSInteger) total by: (NSInteger) value;
 
 @end
