@@ -9,14 +9,14 @@ The app portion of this app features 3 tabs:
 
 The Tests portion of the app runs and verifies the following algorithms in both Objective C and Swift:
 
-* Shift zeroes
-* Remove duplicates
-* Location sort
-* Insertion sort
-* Merge sort
-* Quick sort
-* Palindrome
-* Binary tree to list
-* Permutations 
-* Swap nodes of linked list
-* Traversing nested arrays
+* Shift zeroes.
+* Remove duplicates.
+* Location sort.
+* Insertion sort.
+* Merge sort.
+* Quick sort.
+* Palindrome.
+* Binary tree to list.
+* Permutations.
+* Swap nodes of linked list.
+* Traversing nested arrays.
