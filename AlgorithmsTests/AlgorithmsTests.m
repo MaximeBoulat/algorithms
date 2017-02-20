@@ -21,7 +21,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 	
-	self.numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:501 range:100];
+	self.numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:525 range:100];
 
 }
 
