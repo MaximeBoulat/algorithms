@@ -406,10 +406,7 @@ class AlgorithmManagerSwift: NSObject {
 		
 		return result
 	}
-	
 }
-
-
 
 
 

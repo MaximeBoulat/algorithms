@@ -16,7 +16,7 @@ class AlgorithmSwiftTests: XCTestCase {
     override func setUp() {
         super.setUp()
 		
-		self.numbers = AlgorithmManagerSwift .makeArrayOfInts(capacity: 525, range: 100)
+		self.numbers = AlgorithmManagerSwift.makeArrayOfInts(capacity: 525, range: 100)
 		
     }
     
