@@ -29,8 +29,24 @@
 	self.pushCloneButton.hidden = YES;
 	self.findCommonSuperviewButton.hidden = YES;
 	
+
+	
 	if (self.navigationController.viewControllers[0] == self) {
 		self.title = @"View selection";	}
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	self.pushCloneButton.layer.cornerRadius = self.pushCloneButton.frame.size.height / 2;
+	self.pushCloneButton.layer.borderWidth = 1;
+	self.pushCloneButton.layer.borderColor = [UIColor blackColor].CGColor;
+	self.pushCloneButton.clipsToBounds = YES;
+	
+	self.findCommonSuperviewButton.layer.cornerRadius = self.pushCloneButton.frame.size.height / 2;
+	self.findCommonSuperviewButton.layer.borderWidth = 1;
+	self.findCommonSuperviewButton.layer.borderColor = [UIColor blackColor].CGColor;
+	self.findCommonSuperviewButton.clipsToBounds = YES;
 }
 
 
@@ -105,9 +121,6 @@
 	
 }
 
-- (IBAction)didPressPushClone:(id)sender {
-}
-
-
 
 @end
+
