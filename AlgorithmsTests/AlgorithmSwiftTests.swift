@@ -16,9 +16,7 @@ class AlgorithmSwiftTests: XCTestCase {
     override func setUp() {
         super.setUp()
 		
-		self.numbers = AlgorithmManagerSwift .makeArrayOfInts(capacity: 1000, range: 100)
-		
-//		print("Here are my numbers: \(self.numbers)")
+		self.numbers = AlgorithmManagerSwift .makeArrayOfInts(capacity: 7, range: 10)
 		
     }
     
@@ -173,6 +171,45 @@ class AlgorithmSwiftTests: XCTestCase {
 		
 		XCTAssertEqual(result.sorted(by: <), g.sorted(by: <))
 		
+	}
+	
+	func testSwapNodes() {
+		
+		let linkedList = LinkedListSwift()
+		
+		for number in self.numbers {
+			linkedList.insertValue(value: number)
+		}
+		
+		let newHead = linkedList.head?.next
+		AlgorithmManagerSwift.swapNodes(node: linkedList.head!)
+		linkedList.head = newHead
+		
+		var g = self.numbers
+		
+		var i = 0
+		
+		while i<g.count {
+			if i + 1 < g.count {
+				let first = g[i]
+				let second = g[i + 1]
+				g[i] = second
+				g[i + 1] = first
+			}
+			
+			i += 2
+		}
+		
+		var swapped: [Int] = []
+		
+		var currentNode = linkedList.head
+		
+		while currentNode != nil  {
+			swapped.append((currentNode?.value)!)
+			currentNode = currentNode?.next
+		}
+		
+		XCTAssertEqual(swapped, g)
 	}
 	
 	func testEnumerator() {

@@ -21,7 +21,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 	
-	self.numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:1000 range:100];
+	self.numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:501 range:100];
 
 }
 
@@ -199,6 +199,38 @@
 	
 	XCTAssertEqualObjects([result sortedArrayUsingSelector:@selector(compare:)], [g sortedArrayUsingSelector:@selector(compare:)]);
 	
+}
+
+- (void) testSwapNodes {
+	
+	LinkedList * linkedList = [LinkedList new];
+	for (NSNumber * number in self.numbers) {
+		[linkedList insertValue:number];
+	}
+	
+	[linkedList swapNodes];
+	
+	NSMutableArray * swapped = [NSMutableArray new];
+	
+	LinkedListItem * currentItem = linkedList.head;
+	
+	while (currentItem) {
+		[swapped addObject:currentItem.value];
+		currentItem = currentItem.nextItem;
+	}
+	
+	NSMutableArray *g = [self.numbers mutableCopy];
+	
+	for (NSInteger i = 0; i < g.count; i = i + 2) {
+		if (i + 1 < g.count) {
+			NSNumber * first = g[i];
+			NSNumber * second = g[i + 1];
+			g[i + 1] = first;
+			g[i] = second;
+		}
+	}
+	
+	XCTAssertEqualObjects(swapped, g);
 }
 
 - (void) testEnumerator {
