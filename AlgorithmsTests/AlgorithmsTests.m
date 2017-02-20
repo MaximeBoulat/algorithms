@@ -21,7 +21,7 @@
     [super setUp];
     // Put setup code here. This method is called before the invocation of each test method in the class.
 	
-	self.numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:1000 range:45];
+	self.numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:1000 range:100];
 
 }
 
@@ -74,6 +74,11 @@
 	[AlgorithmManager pullZeroes: shifted];
 	
 	BOOL passed = YES;
+	
+	if (shifted.count != self.numbers.count) {
+		passed = NO;
+	}
+	
 	BOOL rangeStarted = NO;
 	
 	for (NSInteger i = shifted.count - 1; i >= 0; i--) {
@@ -220,6 +225,43 @@
 	NSArray * g = @[@3, @45, @4, @2, @89, @7, @4, @1, @7, @35, @2, @6, @15, @97];
 	
 	XCTAssertEqualObjects([enumerator allObjects], g);
+}
+
+
+
+- (void)testSortPerformance {
+	// This is an example of a performance test case.
+	[self measureBlock:^{
+		[self.numbers sortedArrayUsingSelector:@selector(compare:)];
+	}];
+}
+
+- (void)testLocationSortPerformance {
+	// This is an example of a performance test case.
+	[self measureBlock:^{
+		[AlgorithmManager locationSort: [self.numbers mutableCopy]];
+	}];
+}
+
+- (void)testInsertionSortPerformance {
+	// This is an example of a performance test case.
+	[self measureBlock:^{
+		[AlgorithmManager insertionSort: [self.numbers mutableCopy]];
+	}];
+}
+
+- (void)testMergeSortPerformance {
+	// This is an example of a performance test case.
+	[self measureBlock:^{
+		[AlgorithmManager mergeSort: [self.numbers mutableCopy]  start: 0 end:self.numbers.count - 1];
+	}];
+}
+
+- (void)testQuickSortPerformance {
+	// This is an example of a performance test case.
+	[self measureBlock:^{
+		[AlgorithmManager quickSort:[self.numbers mutableCopy] startIndex: 0 endIndex: self.numbers.count - 1];
+	}];
 }
 
 

@@ -15,47 +15,29 @@ class AlgorithmManagerSwift: NSObject {
 	static func pushZeroesWith(array: [Int]) -> [Int] {
 		
 		var arrayCopy = array;
-		
-		var length = 0
-		
-		for i in (1...array.count - 1).reversed() {
+
+		for i in (0..<array.count).reversed() {
 			let value = array[i]
-			
 			if value == 0 {
-				length = length + 1
-			}
-			else if length != 0 {
-				let start = i + 1
-				let range = start..<start + length
-				let zeroes = array[range]
-				arrayCopy.removeSubrange(range)
-				arrayCopy += zeroes
-				length = 0
+				arrayCopy.remove(at: i)
+				arrayCopy.append(0)
 			}
 		}
 		
 		return arrayCopy
-		
 	}
 	
 	static func pullZeroesWith(array: [Int]) -> [Int] {
 		
 		var copy = array;
-		var length = 0
 		
 		for i in 0..<copy.count {
 			let value = copy[i]
 			
 			if value == 0 {
-				length = length + 1
+				copy.remove(at: i)
+				copy.insert(0, at: 0)
 			}
-			else if length != 0 {
-				let range = i - length..<i
-				let zeroes = copy[range]
-				copy.removeSubrange(range)
-				copy.insert(contentsOf: zeroes, at: 0)
-			}
-			
 		}
 		
 		return copy
@@ -267,13 +249,13 @@ class AlgorithmManagerSwift: NSObject {
 	
 	// MARK:- Binary tree to list
 	
-	static func binaryTreeToListWith(tree: BinaryTreeSwift) {
+	static func binaryTreeToListWith(tree: BinaryTreeSwift) -> [Int] {
 		
 		let node = tree.root
 		
 		let array: [Int] = []
 		let result = self.doBreadthFirstSearch(node: node!, array: array)
-		print("Did I get my binary List from a tree \(result)")
+		return result
 		
 	}
 	
@@ -292,7 +274,7 @@ class AlgorithmManagerSwift: NSObject {
 	
 	// MARK:- Permutations
 	
-	static func setupPermutations() {
+	static func setupPermutations(map: [Int : [String]], input: [Int]) -> [String] {
 		
 		let map = [2 : ["A", "B", "C"],
 		           3 : ["D", "E", "F"],
@@ -302,7 +284,7 @@ class AlgorithmManagerSwift: NSObject {
 		
 		let results = self.doPermutations(map: map, input: input, output: [], index: 0, payload: "")
 		
-		print("permutation result: \(results)")
+		return results
 		
 	}
 	
@@ -409,6 +391,20 @@ class AlgorithmManagerSwift: NSObject {
 				self.swapNodes(node: nextpairFirst!)
 			}
 		}
+	}
+	
+	// MARK:- Swap nodes
+	
+	static func makeArrayOfInts(capacity: Int, range: UInt32) -> [Int] {
+		
+		var result: [Int] = []
+		
+		for _ in 0..<capacity {
+			let value = Int(arc4random_uniform(range))
+			result.append(value)
+		}
+		
+		return result
 	}
 	
 }
@@ -562,9 +558,9 @@ class EnumeratorSwift: NSObject {
 		}
 	}
 	
-	func allObjects() -> [Any] {
+	func allObjects() -> [Int] {
 		
-		var retVal: [Any] = []
+		var retVal: [Int] = []
 		
 		for element in self.data {
 			if let array = element as? [Any] {
@@ -573,7 +569,7 @@ class EnumeratorSwift: NSObject {
 				retVal += objects
 			}
 			else {
-				retVal += [element]
+				retVal += [element as! Int]
 			}
 		}
 		return retVal
