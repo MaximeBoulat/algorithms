@@ -18,4 +18,5 @@ The Tests portion of the app runs and verifies the following algorithms in both 
 * Palindrome
 * Binary tree to list
 * Permutations 
+* Swap nodes of linked list
 * Traversing nested arrays
