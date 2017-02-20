@@ -6,12 +6,12 @@
 //  Copyright © 2017 Maxime Boulat. All rights reserved.
 //
 
-#import "GameCollectionViewController.h"
+#import "MazeViewController.h"
 #import "TileCollectionViewCell.h"
 #import "AlgorithmManager.h"
 #import "Algorithms-Swift.h"
 
-@interface GameCollectionViewController () <UICollectionViewDelegateFlowLayout>
+@interface MazeViewController () <UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, assign) CGFloat insetValue;
 @property (nonatomic, assign) int numberOfItemsAcross;
@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, Direction) {
 };
 
 
-@implementation GameCollectionViewController
+@implementation MazeViewController
 
 static NSString * const reuseIdentifier = @"Cell";
 
@@ -45,14 +45,9 @@ static NSString * const reuseIdentifier = @"Cell";
 	[super viewDidLoad];
 	
 	self.insetValue = 15;
-	self.numberOfItemsAcross = 25;
+	self.numberOfItemsAcross = 23;
 	
 	self.datasource = [NSMutableArray new];
-//	[self makeDataSource];
-//	[self makeMaze];
-	
-	
-	
 	
 	//	[AlgorithmManager doBinarySearch];
 	//
@@ -63,12 +58,15 @@ static NSString * const reuseIdentifier = @"Cell";
 
 	
 	
-	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity:44];
-	NSLog(@"What are the numbers: %@", numbers);
+//	NSArray * numbers = [AlgorithmManager makeArrayOfIntsWithCapacity: 10 range: 4];
+//	NSLog(@"What are the numbers: %@", numbers);
 	
 	NSLog(@"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 	
-//	[AlgorithmManagerSwift pushZeroesWithArray:numbers];
+//	NSArray * shifted = [AlgorithmManager pushZeroes:numbers];
+//	NSLog(@"This is the array shifted: %@", shifted);
+	
+	
 //	[AlgorithmManagerSwift removeDuplicatesWithArray: numbers];
 	
 	/*
@@ -184,10 +182,18 @@ static NSString * const reuseIdentifier = @"Cell";
 	NSArray * allObjects = [self.enumerator allObjects];
 	*/
 	
-	NSArray * sorted = [AlgorithmManagerSwift quickSortWithArray:numbers start:0 end:numbers.count - 1];
+//	NSArray * sorted = [AlgorithmManagerSwift quickSortWithArray:numbers start:0 end:numbers.count - 1];
 //	[AlgorithmManager insertionSort:[numbers mutableCopy]];
 	
-	NSLog(@"here it is sorted: %@", sorted);
+//	NSLog(@"here it is sorted: %@", sorted); 
+	
+}
+
+-(void) viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[self makeDataSource];
+	[self makeMaze];
 	
 }
 
@@ -249,9 +255,9 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//	[self makeMaze];
 	
-	NSLog(@"This is the return value: %@", [self.enumerator next]);
+	[self makeDataSource];
+	[self makeMaze];
 	
 }
 
@@ -626,6 +632,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (void) makeDataSource {
+	
 	[self.datasource removeAllObjects];
 	
 	CGFloat widthOfItem = (self.view.frame.size.width - self.insetValue * 2) / self.numberOfItemsAcross;

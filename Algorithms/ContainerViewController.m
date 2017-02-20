@@ -7,7 +7,7 @@
 //
 
 #import "ContainerViewController.h"
-#import "GameCollectionViewController.h"
+#import "MazeViewController.h"
 #import "ViewHierarchyViewController.h"
 #import "Algorithms-Swift.h"
 
@@ -36,13 +36,13 @@
 	[self addChildViewController:view1];
 	self.view1 = view1;
 	 
-//	UIViewController * sierpinsky = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"Sierpinsky"];
-//	sierpinsky.view.frame = self.container.frame;
-//	[sierpinsky willMoveToParentViewController:self];
-//	[self.container addSubview:sierpinsky.view];
-//	[sierpinsky didMoveToParentViewController:self];
-//	[self addChildViewController:sierpinsky];
-//	self.sierpinsky = sierpinsky;
+	UIViewController * sierpinsky = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"Sierpinsky"];
+	sierpinsky.view.frame = self.container.frame;
+	[sierpinsky willMoveToParentViewController:self];
+	[self.container addSubview:sierpinsky.view];
+	[sierpinsky didMoveToParentViewController:self];
+	[self addChildViewController:sierpinsky];
+	self.sierpinsky = sierpinsky;
 	
 	[self didPressMaze:nil];
 	
@@ -53,7 +53,7 @@
 - (IBAction)didPressMaze:(id)sender {
 	
 	for (UIViewController * child in self.childViewControllers) {
-		if ([child isKindOfClass:[GameCollectionViewController class]]) {
+		if ([child isKindOfClass:[MazeViewController class]]) {
 			[self.container bringSubviewToFront:child.view];
 			break;
 		}

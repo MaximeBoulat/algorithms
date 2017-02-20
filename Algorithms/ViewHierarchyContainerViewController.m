@@ -28,6 +28,9 @@
 	
 	self.pushCloneButton.hidden = YES;
 	self.findCommonSuperviewButton.hidden = YES;
+	
+	if (self.navigationController.viewControllers[0] == self) {
+		self.title = @"View selection";	}
 }
 
 

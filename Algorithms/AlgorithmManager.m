@@ -50,50 +50,25 @@
 
 + (void) pushZeroes: (NSMutableArray *) array {
 	
-	NSInteger length = 0;
-	
 	for (NSInteger i = array.count - 1 ; i >= 0; i--) {
-		
+
 		NSNumber * value = array[i];
-		
-		if (value.intValue == 0) {
-			length += 1;
-		}
-		else if (length != 0) {
-			NSRange range = NSMakeRange(i + 1, length);
-			NSArray * zeroes = [array subarrayWithRange:range];
-			[array removeObjectsInRange:range];
-			[array addObjectsFromArray:zeroes];
-			length = 0;
+		if (value.integerValue == 0) {
+			[array removeObjectAtIndex:i];
+			[array addObject: @0];
 		}
 	}
-	
-	NSLog(@"Array after adjustment: %@", array);
 }
 
 + (void) pullZeroes: (NSMutableArray *) array {
 	
-	NSInteger length = 0;
-	
 	for (NSInteger i = 0; i < array.count; i++) {
-		
 		NSNumber * value = array[i];
-		if (value.intValue == 0) {
-			length += 1;
-		}
-		else if (length != 0) {
-			NSRange range = NSMakeRange(i - length, length);
-			NSArray * zeroes = [array subarrayWithRange:range];
-			NSLog(@"Found some zeroes: %@", zeroes);
-			[array removeObjectsInRange:range];
-			
-			[array insertObjects:zeroes atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, length)]];
-			length = 0;
-			
+		if (value.integerValue == 0) {
+			[array removeObjectAtIndex:i];
+			[array insertObject: @0 atIndex:0];
 		}
 	}
-	NSLog(@"Array after adjustment: %@", array);
-	
 }
 
 #pragma mark - Remove duplicates
@@ -119,25 +94,13 @@
 
 // Location sort
 + (void) locationSort: (NSMutableArray *) array {
-	
-	NSDate * start = [NSDate date];
-	
-	//	NSLog(@"Coming in with array count: %i", array4.count);
+
 	for (int i = 0; i<array.count; i++) {
-		//		NSLog(@"Iterating with index: %li", i);
 		NSInteger indexOfSmallest = [self indexOfSmallestWithStartingIndex:i andArray: array];
 		NSNumber * smallest = array[indexOfSmallest];
 		[array removeObjectAtIndex:indexOfSmallest];
 		[array insertObject:smallest atIndex:i];
 	}
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"locationSort: completed in %f", duration);
-	
-	//	for (Person * person in array) {
-	//		NSLog(@"LOCATION: print person with date: %@", person.birthDate);
-	//	}
 }
 
 
@@ -160,8 +123,6 @@
 // Insertion sort
 + (void) insertionSort: (NSMutableArray *) array {
 	
-	NSDate * start = [NSDate date];
-	
 	for (NSInteger i = 1; i < array.count; i++) {
 		NSNumber * reference = array[i];
 		
@@ -181,18 +142,13 @@
 		
 		array[insertIndex] = reference;
 	}
-	
-	NSDate * end = [NSDate date];
-	NSTimeInterval duration = [end timeIntervalSinceDate:start];
-	NSLog(@"Insertion completed with output: %@", array);
-	NSLog(@"insertionSort: completed in %f", duration);
-
 }
 
 
 
 
 + (void) mergeSort: (NSMutableArray *) array start: (NSInteger) start end: (NSInteger) end {
+	
 	
 	if (end > start) {
 		NSInteger q = (start + end) / 2;
@@ -204,6 +160,7 @@
 
 
 + (void) merge: (NSMutableArray *) array start: (NSInteger) start midPoint: (NSInteger) midPoint end: (NSInteger) end {
+	
 	
 	NSArray * lowHalf = [array subarrayWithRange:NSMakeRange(start, (midPoint - start) + 1)];
 	NSArray * highHalf = [array subarrayWithRange:NSMakeRange(midPoint + 1, end - midPoint)];
@@ -236,16 +193,17 @@
 			indexUpperHalf += 1;
 		}
 	}
+	
 }
 
 
-+ (void) doQuickSort: (NSMutableArray *) array startIndex: (NSInteger) start endIndex: (NSInteger) end {
++ (void) quickSort: (NSMutableArray *) array startIndex: (NSInteger) start endIndex: (NSInteger) end {
 	
 	if (end > start) {
 		NSInteger newPivotIndex = [self partition:array start: start end: end];
 		
-		[self doQuickSort:array startIndex: start endIndex: newPivotIndex - 1];
-		[self doQuickSort:array startIndex: newPivotIndex + 1 endIndex: end];
+		[self quickSort:array startIndex: start endIndex: newPivotIndex - 1];
+		[self quickSort:array startIndex: newPivotIndex + 1 endIndex: end];
 	}
 }
 
@@ -343,7 +301,7 @@
 
 #pragma mark - Binary tree to list
 
-+ (void) binaryTreeToList: (BinaryTree *) tree {
++ (NSArray *) binaryTreeToList: (BinaryTree *) tree {
 	
 	
 	NSMutableArray * queue = [NSMutableArray new];
@@ -354,7 +312,7 @@
 	
 	[self doDepthFirstSearch:linkedList node: rootNode];
 	
-	NSLog(@"Finished traversing the binary tree with array: %@", linkedList);
+	return linkedList;
 }
 
 + (void) doBreadthFirstSearch: (NSMutableArray *) array queue: (NSMutableArray *) queue {
@@ -401,20 +359,13 @@
 
 #pragma mark - Permutations
 
-+ (void) setupPermutations {
-	
-	NSDictionary * map = @{@2 : @[@"A", @"B", @"C"],
-						   @3 : @[@"D", @"E", @"F"],
-						   @4 : @[@"G", @"H", @"I"],
-								 @5 : @[@"J", @"K", @"L"],
-						   @6 : @[@"M", @"N", @"O"],
-						   @7 : @[@"P", @"Q", @"R", @"S"],
-								 @8 : @[@"T", @"U", @"V"]};
-	
-	NSArray * input = @[@4, @6, @7];
++ (NSArray *) setupPermutationsWithInput: (NSArray *) input andMap: (NSDictionary *) map {
+
 	NSMutableArray * output = [NSMutableArray new];
 	
 	[self doPermutationsWithMap:map input:input output:output index:0 payload:@""];
+	
+	return output;
 	
 }
 
@@ -493,13 +444,13 @@
 
 #pragma mark - Helpers
 
-+ (NSArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity {
++ (NSMutableArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity range: (int) range {
 	
 	NSMutableArray * array = [NSMutableArray new];
 	
 	for (NSInteger i = 0; i < capacity; i++) {
 		
-		NSInteger random = arc4random_uniform(100);
+		NSInteger random = arc4random_uniform(range);
 		[array addObject:@(random)];
 	}
 	

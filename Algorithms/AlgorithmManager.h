@@ -49,27 +49,30 @@
 
 @interface AlgorithmManager : NSObject
 
+
+
 + (void) doBinarySearch;
++ (void) pushZeroes: (NSMutableArray *) array;
++ (void) pullZeroes: (NSMutableArray *) array;
++ (void) removeDuplicates: (NSMutableArray *) array;
 + (void) locationSort: (NSMutableArray *) array;
 + (void) insertionSort: (NSMutableArray *) array;
 + (void) mergeSort: (NSMutableArray *) array start: (NSInteger) start end: (NSInteger) end;
-+ (void) doQuickSort: (NSMutableArray *) array startIndex: (NSInteger) start endIndex: (NSInteger) end;
++ (void) quickSort: (NSMutableArray *) array startIndex: (NSInteger) start endIndex: (NSInteger) end;
++ (BOOL) isPalindrome: (NSString *) string;
++ (NSArray *) binaryTreeToList: (BinaryTree *) tree;
++ (NSArray *) setupPermutationsWithInput: (NSArray *) input andMap: (NSDictionary *) map;
+
+
+
++ (NSMutableArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity range: (int) range;
 + (NSInteger) factorial: (NSInteger) value;
 + (NSInteger) recursiveFactorial: (NSInteger) n;
-+ (BOOL) isPalindrome: (NSString *) string;
 + (NSInteger) calculate: (NSInteger) value toThePowerOf: (NSInteger) power;
 
-+ (NSArray *) makeArrayOfIntsWithCapacity: (NSInteger) capacity;
-
-+ (void) pushZeroes: (NSMutableArray *) array;
-+ (void) pullZeroes: (NSMutableArray *) array ;
-+ (void) removeDuplicates: (NSMutableArray *) array;
-
-+ (void) binaryTreeToList: (BinaryTree *) tree;
 
 + (LinkedList *) makeLinkedListFromArray: (NSArray *) array;
 
-+ (void) setupPermutations;
 + (UIView *) findNearestCommonAncestor: (UIView *) first and: (UIView*) second;
 + (void) divide: (NSInteger) total by: (NSInteger) value;
 

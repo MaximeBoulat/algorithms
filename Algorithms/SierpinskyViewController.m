@@ -20,11 +20,19 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 	
-	
-	[self addSubviewsToView:self.view];
-	
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	for (UIView * subview in self.view.subviews) {
+		[subview removeFromSuperview];
+	}
+	
+	[self addSubviewsToView:self.view];
+}
+
+#pragma mark - Helpers
 
 - (void) addSubviewsToView: (UIView *)view {
 	
@@ -41,7 +49,6 @@
 		UIView * subview = [[UIView alloc]initWithFrame:rect];
 		[view addSubview:subview];
 		[self addSubviewsToView:subview];
-		
 		
 		// second view
 		

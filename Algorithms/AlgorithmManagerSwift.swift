@@ -12,7 +12,7 @@ class AlgorithmManagerSwift: NSObject {
 	
 	// MARK:- Shift zeroes
 
-	static func pushZeroesWith(array: [Int]) {
+	static func pushZeroesWith(array: [Int]) -> [Int] {
 		
 		var arrayCopy = array;
 		
@@ -34,11 +34,11 @@ class AlgorithmManagerSwift: NSObject {
 			}
 		}
 		
-		print("Did I push the zeroes \(arrayCopy)")
+		return arrayCopy
 		
 	}
 	
-	static func pullZeroesWith(array: [Int]) {
+	static func pullZeroesWith(array: [Int]) -> [Int] {
 		
 		var copy = array;
 		var length = 0
@@ -58,13 +58,13 @@ class AlgorithmManagerSwift: NSObject {
 			
 		}
 		
-		print("Did I pull the zeroes \(copy)");
+		return copy
 	 
 	}
 	
 	// MARK:- Remove duplicates
 	
-	static func removeDuplicatesWith(array: [Int]) {
+	static func removeDuplicatesWith(array: [Int]) -> [Int] {
 		
 		var copy = array
 		
@@ -82,7 +82,7 @@ class AlgorithmManagerSwift: NSObject {
 			}
 		}
 		
-		print("Did I remove the duplicates? \(copy)")
+		return copy
 		
 	}
 	
