@@ -94,7 +94,7 @@ class AlgorithmSwiftTests: XCTestCase {
 		
 		let result = AlgorithmManagerSwift.removeDuplicatesWith(array: self.numbers)
 		
-		let bag = Set(self.numbers.map({$0}))
+		let bag = Set(self.numbers)
 		
 		let g = Array(bag)
 		
