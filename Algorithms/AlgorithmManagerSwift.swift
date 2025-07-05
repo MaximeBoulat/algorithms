@@ -229,7 +229,7 @@ class AlgorithmManagerSwift: NSObject {
 	
 	static func isPalindrome(string: String) -> Bool {
 		
-		if string.characters.count <= 1 {
+		if string.count <= 1 {
 			return true
 		}
 		
@@ -238,7 +238,7 @@ class AlgorithmManagerSwift: NSObject {
 		
 		if first == last {
 			let range = string.index(after: string.startIndex)..<string.index(before: string.endIndex)
-			let substring = string[range]
+			let substring = String(string[range])
 			return self.isPalindrome(string: substring)
 		}
 		else {
