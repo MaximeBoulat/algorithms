@@ -447,7 +447,8 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
         self.datasource.removeAll()
         
         let widthOfItem = (self.view.frame.size.width - self.insetValue * 2) / CGFloat(self.numberOfItemsAcross)
-        let availableHeight = Int(self.view.frame.size.height - (2 * self.insetValue))
+        let insets = self.view.safeAreaInsets
+        let availableHeight = self.view.frame.size.height - insets.top - insets.bottom - (2 * self.insetValue)
         let numberOfItemsDeep = Int(Double(availableHeight) / Double(widthOfItem))
         self.datasourceCount = numberOfItemsDeep * self.numberOfItemsAcross
         

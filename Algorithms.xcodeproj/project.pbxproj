@@ -14,7 +14,6 @@
 		50A2DFF82E18BBF2003B3AFC /* ViewHierarchyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A2DFF72E18BBF2003B3AFC /* ViewHierarchyViewController.swift */; };
 		50A2DFFA2E18BBFD003B3AFC /* SierpinskyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A2DFF92E18BBFD003B3AFC /* SierpinskyViewController.swift */; };
 		50A2DFFC2E18BC08003B3AFC /* TileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A2DFFB2E18BC08003B3AFC /* TileCollectionViewCell.swift */; };
-		6A133F631E595F280039C274 /* AlgorithmsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A133F621E595F280039C274 /* AlgorithmsTests.m */; };
 		6A857D9E1E52F2B500C489D8 /* AlgorithmManagerSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A857D9D1E52F2B500C489D8 /* AlgorithmManagerSwift.swift */; };
 		6A9769DD1E4581B000C0800C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9769DC1E4581B000C0800C /* main.m */; };
 		6A9769E01E4581B000C0800C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A9769DF1E4581B000C0800C /* AppDelegate.m */; };
@@ -43,7 +42,6 @@
 		50A2DFF92E18BBFD003B3AFC /* SierpinskyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SierpinskyViewController.swift; sourceTree = "<group>"; };
 		50A2DFFB2E18BC08003B3AFC /* TileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCollectionViewCell.swift; sourceTree = "<group>"; };
 		6A133F601E595F280039C274 /* AlgorithmsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AlgorithmsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A133F621E595F280039C274 /* AlgorithmsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AlgorithmsTests.m; sourceTree = "<group>"; };
 		6A133F641E595F280039C274 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A857D9D1E52F2B500C489D8 /* AlgorithmManagerSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlgorithmManagerSwift.swift; sourceTree = "<group>"; };
 		6A9769D81E4581B000C0800C /* Algorithms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Algorithms.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,7 +88,6 @@
 		6A133F611E595F280039C274 /* AlgorithmsTests */ = {
 			isa = PBXGroup;
 			children = (
-				6A133F621E595F280039C274 /* AlgorithmsTests.m */,
 				6AC9134D1E5AAC510040E523 /* AlgorithmSwiftTests.swift */,
 				6A133F641E595F280039C274 /* Info.plist */,
 			);
@@ -248,7 +245,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A133F631E595F280039C274 /* AlgorithmsTests.m in Sources */,
 				6AC9134E1E5AAC510040E523 /* AlgorithmSwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -308,6 +304,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = NVV8DM5TFN;
 				INFOPLIST_FILE = AlgorithmsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.FocusRealm.AlgorithmsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -325,6 +322,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = NVV8DM5TFN;
 				INFOPLIST_FILE = AlgorithmsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.FocusRealm.AlgorithmsTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -430,6 +428,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = NVV8DM5TFN;
 				INFOPLIST_FILE = Algorithms/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.FocusRealm.Algorithms;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -445,6 +444,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = NVV8DM5TFN;
 				INFOPLIST_FILE = Algorithms/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.FocusRealm.Algorithms;
 				PRODUCT_NAME = "$(TARGET_NAME)";
