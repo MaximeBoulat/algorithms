@@ -40,9 +40,9 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     private let reuseIdentifier = "Cell"
     private var insetValue: CGFloat = 15
-    private var datasourceCount: Int = 0
     private var startingPoint: GameTile?
     private var goal: GameTile?
+    private var boardWidth: Int = 23
     
     private var gameWorld: GameWorld!
     
@@ -56,7 +56,7 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.gameWorld = GameWorld(horizontalSpan: 23, inset: 15, view: self.view)
+        self.gameWorld = GameWorld(horizontalSpan: self.boardWidth, inset: self.insetValue, view: self.view)
         makeMaze()
 
     }
@@ -109,7 +109,7 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.gameWorld = GameWorld(horizontalSpan: 23, inset: 15, view: self.view)
+        self.gameWorld = GameWorld(horizontalSpan: self.boardWidth, inset: self.insetValue, view: self.view)
         makeMaze()
     }
     
@@ -130,7 +130,7 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return 0
     }
     
-    // MARK: - Path finding
+    // MARK: - DFS
     
     
     private class GameWorld {
@@ -257,36 +257,34 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
                 let randomIndex = Int.random(in: 0..<directions.count)
                 let currentDirection = directions.remove(at: randomIndex)
                 
-                
+                // check boundaries
                 if dfs.canMove(direction: currentDirection) {
 
-                    // move
+                    // check visited
                     let destination = dfs.calculateDestination(direction: currentDirection)
-                    
                     let destinationTile = self.gameWorld.grid[destination.0][destination.1]
                     
                     if !destinationTile.visited {
-
                         
                         // remove wall
                         let wall = self.gameWorld.teardownWall(between: dfs.position, and: destination)
-
                         
-                        dfs.currentTile.type = .none
-                        
+                        // Build the next graph
                         wall.neighbors.append(dfs.currentTile)
                         dfs.currentTile.neighbors.append(wall)
                         wall.neighbors.append(destinationTile)
                         destinationTile.neighbors.append(wall)
                         
+                        // move
+                        dfs.currentTile.type = .none
                         dfs.position = destination
-                        dfs.currentTile.visited = true
                         dfs.currentTile.type = .pilot
+                        
+                        // Update state
+                        dfs.currentTile.visited = true
                         dfs.tilesVisited += 1
-                        
-                        directions = [Direction.west, Direction.north, Direction.east, Direction.south]
-                        
                         dfs.undoStack.insert(dfs.currentTile, at: 0)
+                        directions = [Direction.west, Direction.north, Direction.east, Direction.south]
                     
                     }
                 }
@@ -312,6 +310,8 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
             }
         }
     }
+    
+    // MARK: BFS
     
     private func setMarkers() {
         
