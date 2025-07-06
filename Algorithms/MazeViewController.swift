@@ -282,7 +282,6 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
                         dfs.position = destination
                         dfs.currentTile.visited = true
                         dfs.currentTile.type = .pilot
-                        dfs.undoStack.append( dfs.currentTile)
                         dfs.tilesVisited += 1
                         
                         directions = [Direction.west, Direction.north, Direction.east, Direction.south]
