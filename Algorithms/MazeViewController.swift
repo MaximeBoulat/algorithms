@@ -154,7 +154,7 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
 
 class DFS {
     
-    var position: (row: Int, column: Int) = (1,1)
+    var position: (row: Int, column: Int)
     var frontier: [GameTile] = []
     
     var tilesVisited: Int = 0
