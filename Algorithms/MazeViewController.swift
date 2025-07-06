@@ -40,8 +40,6 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     private let reuseIdentifier = "Cell"
     private var insetValue: CGFloat = 15
-    private var startingPoint: GameTile?
-    private var goal: GameTile?
     private var boardWidth: Int = 23
     
     private var gameWorld: GameWorld!
@@ -57,8 +55,8 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
         super.viewWillAppear(animated)
         
         self.gameWorld = GameWorld(horizontalSpan: self.boardWidth, inset: self.insetValue, view: self.view)
-        makeMaze()
-
+        self.startSimulation()
+        
     }
     
     // MARK: - CollectionView methods
@@ -110,7 +108,7 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.gameWorld = GameWorld(horizontalSpan: self.boardWidth, inset: self.insetValue, view: self.view)
-        makeMaze()
+        self.startSimulation()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -130,260 +128,203 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
         return 0
     }
     
-    // MARK: - DFS
+    // MARK: Simulation
     
-    
-    private class GameWorld {
+    private func startSimulation() {
         
         
-        var grid: [[GameTile]] = []
+        let dfs = DFS(position: (row: 1, column: 1), gameWorld: self.gameWorld)
         
-        var horizontalSpan: Int
-        
-        var totalTiles: Int = 0
-        var blankTiles: Int = 0
-        
-        init(horizontalSpan: Int, inset: CGFloat, view: UIView) {
+        dfs.traverse {
+            self.collectionView!.reloadData()
+        } completion: {
+            self.gameWorld.setMarkers()
             
-            let widthOfItem = (view.frame.size.width - inset * 2) / CGFloat(horizontalSpan)
-            let safeAreaInsets = view.safeAreaInsets
-            let availableHeight = view.frame.size.height - safeAreaInsets.top - safeAreaInsets.bottom - (2 * inset)
-            let numberOfItemsDeep = Int(Double(availableHeight) / Double(widthOfItem))
-            let totalTiles = numberOfItemsDeep * horizontalSpan
+            let bfs = BFS(startingPoint: self.gameWorld.startingPoint, goal: self.gameWorld.goal)
             
-            var blankTiles = 0
-            
-            for i in 0..<numberOfItemsDeep {
-                var array: [GameTile] = []
-                for l in 0..<horizontalSpan {
-                    let tile = GameTile()
-                    tile.row = i
-                    tile.column = l
-                    if i % 2 == 0 || l % 2 == 0 {
-                        tile.isWall = true
-                    } else {
-                        blankTiles += 1
-                    }
-                    array.append(tile)
-                }
-                self.grid.append(array)
+            bfs.traverse {
+                self.collectionView!.reloadData()
             }
-            
-            self.horizontalSpan = horizontalSpan
-            self.totalTiles = totalTiles
-            self.blankTiles = blankTiles
-        }
-        
-        func teardownWall(between: (row: Int, column: Int), and: (row: Int, column: Int)) -> GameTile {
-            let wallRow = (between.row + and.row) / 2
-            let wallColumn = (between.column + and.column) / 2
-            
-            let wall = self.grid[wallRow][wallColumn]
-            wall.isWall = false
-            return wall
-        }
-        
-        
-    }
-    
-    private class DFS {
-        
-        var position: (row: Int, column: Int) = (1,1)
-        var undoStack: [GameTile] = []
-        
-        var tilesVisited: Int = 0
-        
-        var gameWorld: GameWorld
-        
-        var currentTile: GameTile {
-            return gameWorld.grid[position.row][position.column]
-        }
-        
-        init(position: (row: Int, column: Int), gameWorld: GameWorld) {
-            self.position = position
-            self.gameWorld = gameWorld
-        }
-        
-        func canMove(direction: Direction) -> Bool {
-            switch direction {
-            case .north:
-                return position.row - 2 > 0
-            case .east:
-                return position.column + 2 < gameWorld.horizontalSpan
-            case .south:
-                return position.row + 2 < gameWorld.grid.count
-            case .west:
-                return position.column - 2 > 0
-            }
-        }
-        
-        func calculateDestination(direction: Direction) -> (row: Int, column: Int) {
-            
-            var destination: (row: Int, column: Int)
-            
-            switch direction {
-            case .north:
-                destination = (row: position.row - 2, column: position.column)
-            case .east:
-                destination = (row: position.row, column: position.column + 2)
-            case .south:
-                destination = (row: position.row + 2, column: position.column)
-            case .west:
-                destination = (row: position.row, column: position.column - 2)
-            }
-            
-            return destination
         }
         
     }
+}
+
+// MARK: Agents
+
+class DFS {
     
+    var position: (row: Int, column: Int) = (1,1)
+    var frontier: [GameTile] = []
     
-    private func makeMaze() {
+    var tilesVisited: Int = 0
+    
+    var gameWorld: GameWorld
+    
+    var currentTile: GameTile {
+        return gameWorld.grid[position.row][position.column]
+    }
+    
+    init(position: (row: Int, column: Int), gameWorld: GameWorld) {
+        self.position = position
+        self.gameWorld = gameWorld
+        
+        self.currentTile.visited = true
+        self.frontier.append( self.currentTile)
+        self.tilesVisited += 1
+    }
+    
+    private func canMove(direction: Direction) -> Bool {
+        switch direction {
+        case .north:
+            return position.row - 2 > 0
+        case .east:
+            return position.column + 2 < gameWorld.horizontalSpan
+        case .south:
+            return position.row + 2 < gameWorld.grid.count
+        case .west:
+            return position.column - 2 > 0
+        }
+    }
+    
+    private func calculateDestination(direction: Direction) -> (row: Int, column: Int) {
+        
+        var destination: (row: Int, column: Int)
+        
+        switch direction {
+        case .north:
+            destination = (row: position.row - 2, column: position.column)
+        case .east:
+            destination = (row: position.row, column: position.column + 2)
+        case .south:
+            destination = (row: position.row + 2, column: position.column)
+        case .west:
+            destination = (row: position.row, column: position.column - 2)
+        }
+        
+        return destination
+    }
+    
+    func traverse(update: @escaping () -> Void, completion: @escaping () -> Void) {
+        
         DispatchQueue.global(qos: .default).async {
-      
-            
-            
-            let dfs = DFS(position: (1,1), gameWorld: self.gameWorld)
-            dfs.currentTile.visited = true
-            dfs.undoStack.append( dfs.currentTile)
-            dfs.tilesVisited += 1
             
             var directions = [Direction.west, Direction.north, Direction.east, Direction.south]
             
             
-            while dfs.tilesVisited < self.gameWorld.blankTiles {
+            while self.tilesVisited < self.gameWorld.blankTiles {
                 
                 
                 let randomIndex = Int.random(in: 0..<directions.count)
                 let currentDirection = directions.remove(at: randomIndex)
                 
                 // check boundaries
-                if dfs.canMove(direction: currentDirection) {
-
+                if self.canMove(direction: currentDirection) {
+                    
                     // check visited
-                    let destination = dfs.calculateDestination(direction: currentDirection)
+                    let destination = self.calculateDestination(direction: currentDirection)
                     let destinationTile = self.gameWorld.grid[destination.0][destination.1]
                     
                     if !destinationTile.visited {
                         
                         // remove wall
-                        let wall = self.gameWorld.teardownWall(between: dfs.position, and: destination)
+                        let wall = self.gameWorld.teardownWall(between: self.position, and: destination)
                         
                         // Build the next graph
-                        wall.neighbors.append(dfs.currentTile)
-                        dfs.currentTile.neighbors.append(wall)
+                        wall.neighbors.append(self.currentTile)
+                        self.currentTile.neighbors.append(wall)
                         wall.neighbors.append(destinationTile)
                         destinationTile.neighbors.append(wall)
                         
                         // move
-                        dfs.currentTile.type = .none
-                        dfs.position = destination
-                        dfs.currentTile.type = .pilot
+                        self.currentTile.type = .none
+                        self.position = destination
+                        self.currentTile.type = .pilot
                         
                         // Update state
-                        dfs.currentTile.visited = true
-                        dfs.tilesVisited += 1
-                        dfs.undoStack.insert(dfs.currentTile, at: 0)
+                        self.currentTile.visited = true
+                        self.tilesVisited += 1
+                        self.frontier.insert(self.currentTile, at: 0)
                         directions = [Direction.west, Direction.north, Direction.east, Direction.south]
-                    
+                        
                     }
                 }
                 
                 if directions.isEmpty {
-                    dfs.undoStack.removeFirst()
-                    dfs.currentTile.type = .none
-                    dfs.position = (row: dfs.undoStack[0].row, column: dfs.undoStack[0].column)
-                    dfs.currentTile.type = .pilot
+                    
+                    self.frontier.removeFirst()
+                    self.currentTile.type = .none
+                    
+                    let next = self.frontier[0]
+                    self.position = (row: next.row, column: next.column)
+                    self.currentTile.type = .pilot
                     directions = [Direction.west, Direction.north, Direction.east, Direction.south]
                 }
                 
                 DispatchQueue.main.sync {
-                    self.collectionView!.reloadData()
+                    update()
                 }
                 
             }
             
-            dfs.currentTile.type = .none
+            self.currentTile.type = .none
             
-            DispatchQueue.main.sync {
-                self.setMarkers()
+            
+            DispatchQueue.main.async {
+                completion()
             }
+            
         }
+        
+    }
+}
+
+class BFS {
+    
+    private var frontier: [GameTile] = []
+    
+    private var startingPoint: GameTile
+    private var goal: GameTile
+    
+    
+    init(startingPoint: GameTile, goal: GameTile) {
+        self.startingPoint = startingPoint
+        self.goal = goal
     }
     
-    // MARK: BFS
-    
-    private func setMarkers() {
-        
-        // pick random row and column for start until you get an empty tile
-        var randomRow = Int(arc4random_uniform(UInt32(self.gameWorld.grid.count)))
-        var randomColumn = Int(arc4random_uniform(UInt32(self.gameWorld.horizontalSpan)))
-        var tile = self.gameWorld.grid[randomRow][randomColumn]
-        
-        while tile.isWall {
-            randomRow = Int(arc4random_uniform(UInt32(self.gameWorld.grid.count)))
-            randomColumn = Int(arc4random_uniform(UInt32(self.gameWorld.horizontalSpan)))
-            tile = self.gameWorld.grid[randomRow][randomColumn]
-        }
-        
-        tile.type = .startingPoint
-        self.startingPoint = tile
-        
-        self.collectionView!.reloadData()
-        
-        // pick random row and column for goal until you get an empty tile
-        randomRow = Int(arc4random_uniform(UInt32(self.gameWorld.grid.count)))
-        randomColumn = Int(arc4random_uniform(UInt32(self.gameWorld.horizontalSpan)))
-        tile = self.gameWorld.grid[randomRow][randomColumn]
-        
-        while tile.isWall {
-            randomRow = Int(arc4random_uniform(UInt32(self.gameWorld.grid.count)))
-            randomColumn = Int(arc4random_uniform(UInt32(self.gameWorld.horizontalSpan)))
-            tile = self.gameWorld.grid[randomRow][randomColumn]
-        }
-        
-        tile.type = .goal
-        self.goal = tile
-        
-        self.collectionView!.reloadData()
-        findPath()
-    }
-    
-    
-    private func findPath() {
+    func traverse(update: @escaping () -> Void) {
         
         DispatchQueue.global(qos: .default).async {
             
-            var queue: [GameTile] = []
-            self.startingPoint?.score = 0
-            if let startingPoint = self.startingPoint {
-                queue.append(startingPoint)
-            }
+            self.startingPoint.score = 0
+            self.frontier.append(self.startingPoint)
             
-            while !queue.isEmpty {
-                let currentTile = queue.removeFirst()
+            while !self.frontier.isEmpty {
+                let currentTile = self.frontier.removeFirst()
                 
                 for neighbor in currentTile.neighbors {
                     if neighbor.score < 0 {
                         neighbor.score = currentTile.score + 1
-                        queue.append(neighbor)
+                        self.frontier.append(neighbor)
+                        
                     }
                 }
                 
                 DispatchQueue.main.sync {
-                    self.collectionView!.reloadData()
+                    update()
                 }
+                
+                
             }
             
             // now starting at the end point, rewind to stroke the path
-            guard let goal = self.goal, let startingPoint = self.startingPoint else { return }
             
-            var currentTile = goal
+            var currentTile = self.goal
             
-            while currentTile !== startingPoint {
+            while currentTile !== self.startingPoint {
                 for neighbor in currentTile.neighbors {
                     if neighbor.score < currentTile.score {
-                        if neighbor !== startingPoint {
+                        if neighbor !== self.startingPoint {
                             neighbor.type = .path
                         }
                         currentTile = neighbor
@@ -391,12 +332,103 @@ class MazeViewController: UICollectionViewController, UICollectionViewDelegateFl
                     }
                 }
             }
-            
-            DispatchQueue.main.sync {
-                self.collectionView!.reloadData()
-            }
         }
+        
+        DispatchQueue.main.async {
+            update()
+        }
+        
     }
     
-
+    
 }
+
+class GameWorld {
+    
+    
+    var grid: [[GameTile]] = []
+    
+    var horizontalSpan: Int
+    
+    var totalTiles: Int = 0
+    var blankTiles: Int = 0
+    
+    var startingPoint: GameTile!
+    var goal: GameTile!
+    
+    init(horizontalSpan: Int, inset: CGFloat, view: UIView) {
+        
+        let widthOfItem = (view.frame.size.width - inset * 2) / CGFloat(horizontalSpan)
+        let safeAreaInsets = view.safeAreaInsets
+        let availableHeight = view.frame.size.height - safeAreaInsets.top - safeAreaInsets.bottom - (2 * inset)
+        let numberOfItemsDeep = Int(Double(availableHeight) / Double(widthOfItem))
+        let totalTiles = numberOfItemsDeep * horizontalSpan
+        
+        var blankTiles = 0
+        
+        for i in 0..<numberOfItemsDeep {
+            var array: [GameTile] = []
+            for l in 0..<horizontalSpan {
+                let tile = GameTile()
+                tile.row = i
+                tile.column = l
+                if i % 2 == 0 || l % 2 == 0 {
+                    tile.isWall = true
+                } else {
+                    blankTiles += 1
+                }
+                array.append(tile)
+            }
+            self.grid.append(array)
+        }
+        
+        self.horizontalSpan = horizontalSpan
+        self.totalTiles = totalTiles
+        self.blankTiles = blankTiles
+    }
+    
+    func teardownWall(between: (row: Int, column: Int), and: (row: Int, column: Int)) -> GameTile {
+        let wallRow = (between.row + and.row) / 2
+        let wallColumn = (between.column + and.column) / 2
+        
+        let wall = self.grid[wallRow][wallColumn]
+        wall.isWall = false
+        return wall
+    }
+    
+    func setMarkers() {
+        
+        // pick random row and column for start until you get an empty tile
+        var randomRow = Int(arc4random_uniform(UInt32(self.grid.count)))
+        var randomColumn = Int(arc4random_uniform(UInt32(self.horizontalSpan)))
+        var tile = self.grid[randomRow][randomColumn]
+        
+        while tile.isWall {
+            randomRow = Int(arc4random_uniform(UInt32(self.grid.count)))
+            randomColumn = Int(arc4random_uniform(UInt32(self.horizontalSpan)))
+            tile = self.grid[randomRow][randomColumn]
+        }
+        
+        tile.type = .startingPoint
+        self.startingPoint = tile
+        
+        // pick random row and column for goal until you get an empty tile
+        randomRow = Int(arc4random_uniform(UInt32(self.grid.count)))
+        randomColumn = Int(arc4random_uniform(UInt32(self.horizontalSpan)))
+        tile = self.grid[randomRow][randomColumn]
+        
+        while tile.isWall {
+            randomRow = Int(arc4random_uniform(UInt32(self.grid.count)))
+            randomColumn = Int(arc4random_uniform(UInt32(self.horizontalSpan)))
+            tile = self.grid[randomRow][randomColumn]
+        }
+        
+        tile.type = .goal
+        self.goal = tile
+        
+    }
+    
+}
+
+
+
